@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    if(Auth::check()){ // 로그인이 완료된 사용자
+        return redirect('home');
+    }
     return view('welcome');
-});
+})->name('root');
 
-Auth::routes();
+/* social login */
+Route::get('social/{provider}',[
+    'as'=>'social.login',
+    'uses' => 'SocialController@execute',
+]);
+
+Route::get('auth/logout', [
+    'as' => 'sessions.destroy',
+    'uses' => 'SessionsController@destroy',
+]);
 
 Route::get('/home', 'HomeController@index')->name('home');
