@@ -11,12 +11,16 @@
                         </div>
                         <div style="margin-top: 1em;">
                             <h3>
-                                {{ auth()->user()->login_name }}
+                                {{ auth()->user()->github_id }}
                             </h3>
                         </div>
                     </div>
-                    <div class="card-footer" style="text-align: right">
-                        <a style="color: gray" href={{ "https://github.com/".auth()->user()->login_name }}>Github <i class="fab fa-github"></i></a>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col" style="text-align: right">
+                                <a style="color: gray" href={{ auth()->user()->github_url }}>Github <i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
