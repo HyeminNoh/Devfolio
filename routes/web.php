@@ -21,6 +21,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('root');
 
+Route::get('/home', 'HomeController@index')->name('home');
+
 /* social login */
 Route::get('social/{provider}',[
     'as'=>'social.login',
@@ -32,4 +34,4 @@ Route::get('auth/logout', [
     'uses' => 'SessionsController@destroy',
 ]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/user/detail', 'UserController@show');
