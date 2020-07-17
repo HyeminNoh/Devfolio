@@ -17,9 +17,11 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('login_name');
+            $table->string('github_id');
             $table->string('avatar');
             $table->string('access_token');
+            $table->string('github_url');
+            $table->string('blog_url')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +31,7 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
+
     public function down()
     {
         Schema::dropIfExists('users');
