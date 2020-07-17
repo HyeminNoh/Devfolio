@@ -16,8 +16,4 @@ class SessionsController extends Controller
 
         return redirect('/');
     }
-
-    protected function respondError($message){
-        return back()->withInput();
-    }
 }
