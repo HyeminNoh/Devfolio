@@ -27,4 +27,8 @@ class User extends Authenticatable
     protected $hidden = [
         'access_token',
     ];
+
+    public function contributions(){
+        return $this->hasOne(Contribution::class);
+    }
 }
