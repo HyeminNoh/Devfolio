@@ -54,15 +54,21 @@ class SocialController extends Controller
         $user = Socialite::driver($provider)->user();
         $token = $user->token;
 
-        $user = (\App\User::whereEmail($user->getEmail())->first())
-            ?: \App\User::create([
-                'name'  => $user->getName() ?: 'unknown',
+        $userDetail = Socialite::driver('github')->userFromToken($token);
+
+        $user = (\App\User::whereEmail($user->getEmail())->first());
+        if(! $user) {
+            // 새로운 사용자 추가
+            \App\User::create([
+                'name' => $user->getName() ?: 'unknown',
                 'email' => $user->getEmail(),
-                'login_name' => $user->getNickname(),
+                'github_id' => $user->getNickname(),
                 'access_token' => $token,
+                'github_url' => $userDetail->user['html_url'],
+                'blog_url' => $userDetail->user['blog'] ?: '',
                 'avatar' => $user->getAvatar(),
             ]);
-
+        }
         auth()->login($user);
 
         return redirect(route('home'));
