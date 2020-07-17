@@ -34,4 +34,15 @@ Route::get('auth/logout', [
     'uses' => 'SessionsController@destroy',
 ]);
 
+Route::get('contributions/store', [
+    'as'=>'contribution.store',
+    'uses' => 'ContributionController@store'
+]);
+
+Route::get('contributions/show', 'ContributionController@show');
+
+Route::resource('contributions', 'ContributionController')->only(
+    'show'
+);
+
 // Route::get('/user/detail', 'UserController@show');
