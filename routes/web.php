@@ -39,10 +39,11 @@ Route::get('contributions/store', [
     'uses' => 'ContributionController@store'
 ]);
 
-Route::get('contributions/show', 'ContributionController@show');
+Route::get('contributions/update', [
+    'as'=>'contribution.update',
+    'uses' => 'ContributionController@update'
+]);
 
-Route::resource('contributions', 'ContributionController')->only(
-    'show'
-);
+Route::get('contributions/show', 'ContributionController@show');
 
 // Route::get('/user/detail', 'UserController@show');
