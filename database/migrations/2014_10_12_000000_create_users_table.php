@@ -22,7 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('access_token');
             $table->string('github_url');
             $table->string('blog_url')->nullable();
-            $table->timestamps();
+            $table->dateTime('created_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

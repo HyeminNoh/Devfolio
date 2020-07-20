@@ -14,13 +14,15 @@ class CreateContributionsTable extends Migration
     public function up()
     {
         Schema::create('contributions', function (Blueprint $table) {
-            $table->increments('idx');
-            $table->integer('user_idx')->unsigned()->index();
+            $table->id('idx');
+            $table->bigInteger('user_idx')->unsigned()->index();
             $table->json('data');
-            $table->timestamps();
+            $table->dateTime('created_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->foreign('user_idx')->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
+
         });
     }
 
