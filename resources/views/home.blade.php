@@ -29,16 +29,21 @@
                     <div class="col">
                         <div class="card">
                             <div class="card-header">
-                                <h4>📅 Contribution Callendar</h4>
+                                <div class="row">
+                                    <h4>📅 Contribution Calendar</h4>
+                                    <div class="col" style="text-align: right">
+                                        <button onclick="calendarUpdate()" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
-                                @if (session('status'))
-                                    <div class="alert alert-success" role="alert">
-                                        {{ session('status') }}
+                                <div id="calendar-div">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-border text-secondary" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
                                     </div>
-                                @endif
-
-                                {{ __('You are logged in!') }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -47,7 +52,12 @@
                     <div class="col" style="margin-top:1em;">
                         <div class="card">
                             <div class="card-header">
-                                <h4>📊 Skills</h4>
+                                <div class="row">
+                                    <h4>📊 Skills</h4>
+                                    <div class="col" style="text-align: right">
+                                        <button onclick="" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -70,7 +80,12 @@
                     <div class="col" style="margin-top:1em;">
                         <div class="card">
                             <div class="card-header">
-                                <h4>📌 Pinned Repository</h4>
+                                <div class="row">
+                                    <h4>📌 Pinned Repository</h4>
+                                    <div class="col" style="text-align: right">
+                                        <button onclick="" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -101,3 +116,7 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/dataLoad.js') }}"></script>
+@endpush
