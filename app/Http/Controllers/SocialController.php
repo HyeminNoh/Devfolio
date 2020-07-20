@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteManager;
 
@@ -51,26 +53,26 @@ class SocialController extends Controller
      */
     protected function handleProviderCallback($provider)
     {
-        $user = Socialite::driver($provider)->user();
-        $token = $user->token;
+        $loginUser = Socialite::driver($provider)->user();
+        $token = $loginUser->token;
 
-        $userDetail = Socialite::driver('github')->userFromToken($token);
-
-        $user = (\App\User::whereEmail($user->getEmail())->first());
+        $user = (\App\User::whereEmail($loginUser->getEmail())->first());
         if(! $user) {
             // 새로운 사용자 추가
-            \App\User::create([
-                'name' => $user->getName() ?: 'unknown',
-                'email' => $user->getEmail(),
-                'github_id' => $user->getNickname(),
+            $id = DB::table('users')->insertGetId([
+                'name' => $loginUser->getName() ?: 'unknown',
+                'email' => $loginUser->getEmail(),
+                'github_id' => $loginUser->getNickname(),
                 'access_token' => $token,
-                'github_url' => $userDetail->user['html_url'],
-                'blog_url' => $userDetail->user['blog'] ?: '',
-                'avatar' => $user->getAvatar(),
+                'github_url' => $loginUser->user['html_url'],
+                'blog_url' => $loginUser->user['blog'] ?: '',
+                'avatar' => $loginUser->getAvatar(),
+                'updated_dt' => now(),
+                'created_dt' => now()
             ]);
+            $user = \App\User::where('id', $id)->first();
         }
         auth()->login($user);
-
         return redirect(route('home'));
     }
 }
