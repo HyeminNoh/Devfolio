@@ -19,16 +19,7 @@ class User extends Authenticatable
         'name', 'email', 'github_id', 'access_token', 'avatar', 'github_url', 'blog_url',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'access_token',
-    ];
-
-    public function contributions(){
-        return $this->hasOne(Contribution::class);
+    public function contribution(){
+        return $this->belongsTo(Contribution::class);
     }
 }
