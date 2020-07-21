@@ -3,7 +3,7 @@ window.onload = function () {
 }
 
 function calendarUpdate() {
-    // 데이터 로드
+    // 데이터 갱신
     $.ajax({
         url: "http://127.0.0.1:8000/contributions/update",
         method: "GET",
@@ -35,11 +35,14 @@ function calendarLoad() {
 function drawCalendar(data) {
     const calendarDiv = document.getElementById('calendar-div')
     const totalContribution = document.createElement("p")
-    console.log(JSON.parse(data[0].data));
+    // console.log(JSON.parse(data[0].data));
+
     const contributions = JSON.parse(data[0].data);
     totalContribution.innerText = "Total Contribution: "+contributions.totalContributions
+
     const updatedDate  = document.createElement('p');
     updatedDate.innerText = "Last Updated time: "+data[0].updated_dt
+
     calendarDiv.append(totalContribution)
     calendarDiv.append(updatedDate)
 }

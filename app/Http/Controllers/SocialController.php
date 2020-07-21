@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
-use Laravel\Socialite\SocialiteManager;
 
 class SocialController extends Controller
 {
@@ -49,14 +50,14 @@ class SocialController extends Controller
      * Obtain the user information from the Social Login Provider.
      *
      * @param string $provider
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     protected function handleProviderCallback($provider)
     {
         $loginUser = Socialite::driver($provider)->user();
         $token = $loginUser->token;
 
-        $user = (\App\User::whereEmail($loginUser->getEmail())->first());
+        $user = (User::whereEmail($loginUser->getEmail())->first());
         if(! $user) {
             // 새로운 사용자 추가
             $id = DB::table('users')->insertGetId([
@@ -70,7 +71,7 @@ class SocialController extends Controller
                 'updated_dt' => now(),
                 'created_dt' => now()
             ]);
-            $user = \App\User::where('id', $id)->first();
+            $user = User::where('id', $id)->first();
         }
         auth()->login($user);
         return redirect(route('home'));
