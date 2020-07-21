@@ -46,4 +46,28 @@ Route::get('contributions/update', [
 
 Route::get('contributions/show', 'ContributionController@show');
 
+Route::get('repositories/store', [
+    'as'=>'repository.store',
+    'uses' => 'RepositoryController@store'
+]);
+
+Route::get('repositories/update', [
+    'as'=>'repository.update',
+    'uses' => 'RepositoryController@update'
+]);
+
+Route::get('repositories/show', 'RepositoryController@show');
+
+Route::get('skills/store', [
+    'as'=>'skill.store',
+    'uses' => 'SkillController@store'
+]);
+
+Route::get('skills/update', [
+    'as'=>'skill.update',
+    'uses' => 'SkillController@update'
+]);
+
+Route::get('skills/show', 'SkillController@show');
+
 // Route::get('/user/detail', 'UserController@show');
