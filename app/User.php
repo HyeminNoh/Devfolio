@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -21,5 +20,13 @@ class User extends Authenticatable
 
     public function contribution(){
         return $this->belongsTo(Contribution::class);
+    }
+
+    public function repository(){
+        return $this->belongsTo(Repository::class);
+    }
+
+    public function skill(){
+        return $this->belongsTo(Skill::class);
     }
 }
