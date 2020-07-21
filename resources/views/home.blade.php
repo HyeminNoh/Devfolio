@@ -31,12 +31,20 @@
                             <div class="card-header">
                                 <div class="row">
                                     <h4>📅 Contribution Calendar</h4>
-                                    <div class="col" style="text-align: right">
+                                    <div class="col text-right">
                                         <button onclick="calendarUpdate()" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
+                                <div class="row">
+                                    <div class="col text-lef">
+                                        <p id="total-contribution-text">Total Contribution: </p>
+                                    </div>
+                                    <div class="col text-right">
+                                        <p id="calendar-updated-text" style="color: gray">Last Updated: </p>
+                                    </div>
+                                </div>
                                 <div id="calendar-div">
                                     <div class="d-flex justify-content-center">
                                         <div class="spinner-border text-secondary" role="status">
@@ -55,7 +63,7 @@
                                 <div class="row">
                                     <h4>📊 Skills</h4>
                                     <div class="col" style="text-align: right">
-                                        <button onclick="" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
+                                        <button onclick="skillsUpdate()" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -63,13 +71,24 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card">
-                                            <div class="card-body">
-                                                <p>Pie Graph</p>
+                                            <div id="pie-chart-div" class="card-body">
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="spinner-border text-secondary" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <p>Programming Language Skills Statistics</p>
+                                        <div class="row">
+                                            <div class="col text-right">
+                                                <p id="skill-updated-text" style="color: gray">Last Updated: </p>
+                                            </div>
+                                        </div>
+                                        <div id="chart-desc-div" class="row">
+                                            <p>Loading...</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -83,28 +102,20 @@
                                 <div class="row">
                                     <h4>📌 Pinned Repository</h4>
                                     <div class="col" style="text-align: right">
-                                        <button onclick="" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
+                                        <button onclick="repositoriesUpdate()" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-lg-6 col-md-12" style="padding: 1em;">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h5>Pinned Repository Name</h5>
-                                                <hr>
-                                                <p>description</p>
-                                            </div>
-                                        </div>
+                                    <div class="col text-right">
+                                        <p id="repository-updated-text" style="color: gray">Last Updated: </p>
                                     </div>
-                                    <div class="col-lg-6 col-md-12" style="padding: 1em;">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h5>Pinned Repository Name</h5>
-                                                <hr>
-                                                <p>description</p>
-                                            </div>
+                                </div>
+                                <div id="repositories-div">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-border text-secondary" role="status">
+                                            <span class="sr-only">Loading...</span>
                                         </div>
                                     </div>
                                 </div>
@@ -119,4 +130,6 @@
 
 @push('scripts')
     <script src="{{ asset('js/dataLoad.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 @endpush
