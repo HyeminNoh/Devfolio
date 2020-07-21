@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ContributionController extends Controller
 {
@@ -48,7 +50,7 @@ class ContributionController extends Controller
                 ]
             )->getBody();
 
-            // \Log::info(sprintf($response));
+            Log::info('Calling API for Contribution Calendar Data Success');
 
             // 데이터 파싱
             $response_array = json_decode($response);
@@ -58,6 +60,8 @@ class ContributionController extends Controller
 
         } catch (GuzzleException $e) {
             // api 오류 처리
+            Log::info("Calling API for Contribution Calendar Data Fail");
+            Log::debug("Calling API Error Message: \n".$e);
         }
     }
 
@@ -69,18 +73,31 @@ class ContributionController extends Controller
     public function store()
     {
         $response = $this->getData();
-        DB::table('contributions')->insert([
-            'user_idx'=>auth()->user()->id ,
-            'data'=>$response,
-            'created_dt'=>now(),
-            'updated_dt'=>now()
-        ]);
+        try {
+            DB::table('contributions')->insert([
+                'user_idx'=>auth()->user()->id ,
+                'data'=>$response,
+                'created_dt'=>now(),
+                'updated_dt'=>now()
+            ]);
+            Log::info('Insert Contribution Data Success');
+        } catch(QueryException $e){
+            Log::info('Insert Contribution Data Fail');
+            Log::debug("Insert Error Message: \n".$e);
+        }
     }
 
     public function update()
     {
         $response = $this->getData();
-        DB::table('contributions')->update(['data'=>$response,'updated_dt'=>now()]);
+        try{
+            DB::table('contributions')->update(['data'=>$response,'updated_dt'=>now()]);
+            Log::info('Update Contribution Data Success');
+        } catch (QueryException $e){
+            Log::info('Update Contribution Data Fail');
+            Log::debug("Update Error Message: \n".$e);
+        }
+
     }
 
     /**
@@ -98,10 +115,18 @@ class ContributionController extends Controller
             $this->store();
         }
 
-        // 조회
-        return DB::table('contributions')
-            ->select(['data','updated_dt'])
-            ->where('user_idx', auth()->user()->id)
-            ->get()->toJson();
+        try{
+            // 조회
+            $userdata = DB::table('contributions')
+                ->select(['data','updated_dt'])
+                ->where('user_idx', auth()->user()->id)
+                ->get()->toJson();
+
+            Log::info('Select Contribution Data Success');
+            return $userdata;
+        } catch (QueryException $e){
+            Log::info('Select Contribution Data Fail');
+            Log::debug("Select Error Message: \n".$e);
+        }
     }
 }

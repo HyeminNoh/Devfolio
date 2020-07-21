@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
@@ -54,26 +55,35 @@ class SocialController extends Controller
      */
     protected function handleProviderCallback($provider)
     {
-        $loginUser = Socialite::driver($provider)->user();
-        $token = $loginUser->token;
+        try{
+            $loginUser = Socialite::driver($provider)->user();
+            $token = $loginUser->token;
 
-        $user = (User::whereEmail($loginUser->getEmail())->first());
-        if(! $user) {
-            // 새로운 사용자 추가
-            $id = DB::table('users')->insertGetId([
-                'name' => $loginUser->getName() ?: 'unknown',
-                'email' => $loginUser->getEmail(),
-                'github_id' => $loginUser->getNickname(),
-                'access_token' => $token,
-                'github_url' => $loginUser->user['html_url'],
-                'blog_url' => $loginUser->user['blog'] ?: '',
-                'avatar' => $loginUser->getAvatar(),
-                'updated_dt' => now(),
-                'created_dt' => now()
-            ]);
-            $user = User::where('id', $id)->first();
+            $user = (User::whereEmail($loginUser->getEmail())->first());
+            if(! $user) {
+                // 새로운 사용자 추가
+                $id = DB::table('users')->insertGetId([
+                    'name' => $loginUser->getName() ?: $loginUser->getNickname(),
+                    'email' => $loginUser->getEmail(),
+                    'github_id' => $loginUser->getNickname(),
+                    'access_token' => $token,
+                    'github_url' => $loginUser->user['html_url'],
+                    'blog_url' => $loginUser->user['blog'] ?: '',
+                    'avatar' => $loginUser->getAvatar(),
+                    'updated_dt' => now(),
+                    'created_dt' => now()
+                ]);
+                Log::info('Sign Up: '.$loginUser->getEmail());
+
+                $user = User::where('id', $id)->first();
+            }
+            auth()->login($user);
+            Log::info('Sign in: '.auth()->user()->name);
+            return redirect(route('home'));
+        } catch (\Exception $e){
+            Log::info('Gihub Login Fail');
+            Log::debug('Github Login Error Message');
+            return redirect('/');
         }
-        auth()->login($user);
-        return redirect(route('home'));
     }
 }
