@@ -62,6 +62,7 @@ class ContributionController extends Controller
             // api 오류 처리
             Log::info("Calling API for Contribution Calendar Data Fail");
             Log::debug("Calling API Error Message: \n".$e);
+            return false;
         }
     }
 
@@ -73,31 +74,34 @@ class ContributionController extends Controller
     public function store()
     {
         $response = $this->getData();
-        try {
-            DB::table('contributions')->insert([
-                'user_idx'=>auth()->user()->id ,
-                'data'=>$response,
-                'created_dt'=>now(),
-                'updated_dt'=>now()
-            ]);
-            Log::info('Insert Contribution Data Success');
-        } catch(QueryException $e){
-            Log::info('Insert Contribution Data Fail');
-            Log::debug("Insert Error Message: \n".$e);
+        if ($response){
+            try {
+                DB::table('contributions')->insert([
+                    'user_idx'=>auth()->user()->id ,
+                    'data'=>$response,
+                    'created_dt'=>now(),
+                    'updated_dt'=>now()
+                ]);
+                Log::info('Insert Contribution Data Success');
+            } catch(QueryException $e){
+                Log::info('Insert Contribution Data Fail');
+                Log::debug("Insert Error Message: \n".$e);
+            }
         }
     }
 
     public function update()
     {
         $response = $this->getData();
-        try{
-            DB::table('contributions')->update(['data'=>$response,'updated_dt'=>now()]);
-            Log::info('Update Contribution Data Success');
-        } catch (QueryException $e){
-            Log::info('Update Contribution Data Fail');
-            Log::debug("Update Error Message: \n".$e);
+        if($response){
+            try{
+                DB::table('contributions')->where('user_idx', auth()->user()->id)->update(['data'=>$response,'updated_dt'=>now()]);
+                Log::info('Update Contribution Data Success');
+            } catch (QueryException $e){
+                Log::info('Update Contribution Data Fail');
+                Log::debug("Update Error Message: \n".$e);
+            }
         }
-
     }
 
     /**
@@ -115,8 +119,8 @@ class ContributionController extends Controller
             $this->store();
         }
 
+        // 조회
         try{
-            // 조회
             $userdata = DB::table('contributions')
                 ->select(['data','updated_dt'])
                 ->where('user_idx', auth()->user()->id)
