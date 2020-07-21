@@ -51,8 +51,6 @@ return [
 
         'syslog' => [
             'driver' => 'syslog',
-            'tap' => [App\Logging\CustomizeFormatter::class],
-            'path' => storage_path('logs/debug/'.date('Y-m-d').'.log'),
             'level' => 'debug',
         ],
     ],
