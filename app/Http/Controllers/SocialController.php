@@ -56,32 +56,31 @@ class SocialController extends Controller
     protected function handleProviderCallback($provider)
     {
         try{
-            $loginUser = Socialite::driver($provider)->user();
-            $token = $loginUser->token;
+            // oauth 정보 로드
+            $socialData = Socialite::driver($provider)->user();
 
-            $user = (User::whereEmail($loginUser->getEmail())->first());
+            // 사용자 존재 체크
+            $user = (User::whereEmail($socialData->getEmail())->first());
             if(! $user) {
                 // 새로운 사용자 추가
-                $id = DB::table('users')->insertGetId([
-                    'name' => $loginUser->getName() ?: $loginUser->getNickname(),
-                    'email' => $loginUser->getEmail(),
-                    'github_id' => $loginUser->getNickname(),
-                    'access_token' => $token,
-                    'github_url' => $loginUser->user['html_url'],
-                    'blog_url' => $loginUser->user['blog'] ?: '',
-                    'avatar' => $loginUser->getAvatar(),
+                $user = User::create([
+                    'name' => $socialData->getName() ?: $socialData->getNickname(),
+                    'email' => $socialData->getEmail(),
+                    'github_id' => $socialData->getNickname(),
+                    'access_token' => $socialData->token,
+                    'github_url' => $socialData->user['html_url'],
+                    'blog_url' => $socialData->user['blog'] ?: '',
+                    'avatar' => $socialData->getAvatar(),
                     'updated_dt' => now(),
                     'created_dt' => now()
                 ]);
-                Log::info('Sign Up: '.$loginUser->getEmail());
-
-                $user = User::where('id', $id)->first();
+                Log::info('Sign Up: '.$socialData->getEmail());
             }
             auth()->login($user);
             Log::info('Sign in: '.auth()->user()->name);
             return redirect(route('home'));
         } catch (\Exception $e){
-            Log::info('Gihub Login Fail');
+            Log::info('Github Login Fail');
             Log::debug('Github Login Error Message');
             return redirect('/');
         }
