@@ -57,14 +57,10 @@ class SkillController extends Controller
 
             // 데이터 파싱
             $response_array = json_decode($response);
+            $response = $response_array->data->repositoryOwner->repositories->edges;
+            $parsedValue = $this->parsing($response);
 
-            $response = $response_array->data->repositoryOwner->repositories;
-
-            $statisticValue = $this->aggregate($response->edges);
-            // Log::info(json_encode($statisticValue));
-
-            //return json_encode($response);
-            return json_encode($statisticValue);
+            return json_encode($parsedValue);
 
         } catch (GuzzleException $e) {
             // api 오류 처리
@@ -74,9 +70,9 @@ class SkillController extends Controller
         }
     }
 
-    // 전체 reposit에 대한 통계 생성
-    public function aggregate(array $data){
-        $resultArray = array();
+    // 전체 reposit의 language 정보 파싱
+    public function parsing(array $data){
+        $noDuplication = array();
 
         foreach ($data as $obj){
             // Log::info(json_encode($obj));
@@ -84,16 +80,22 @@ class SkillController extends Controller
             foreach ($languages as $lang){
                 $langName = $lang->node->name;
                 $langSize = $lang->size;
-                if(! array_key_exists($langName, $resultArray)){
+                if(! array_key_exists($langName, $noDuplication)){
                     $langColor = $lang->node->color;
-                    $resultArray[$langName] = array(
+                    $noDuplication[$langName] = array(
+                        'name' => $langName,
                         'color'=>$langColor,
                         'size'=>$langSize
                     );
                 } else {
-                    $resultArray[$langName]['size'] += $langSize;
+                    $noDuplication[$langName]['size'] += $langSize;
                 }
             }
+        }
+
+        $resultArray = array();
+        foreach ($noDuplication as $result){
+            array_push($resultArray, $result);
         }
 
         return $resultArray;
@@ -110,7 +112,7 @@ class SkillController extends Controller
         if ($response){
             try {
                 DB::table('skills')->insert([
-                    'user_idx'=>auth()->user()->id ,
+                    'user_idx'=>auth()->user()->idx ,
                     'data'=>$response,
                     'created_dt'=>now(),
                     'updated_dt'=>now()
@@ -128,7 +130,7 @@ class SkillController extends Controller
         $response = $this->getData();
         if($response){
             try{
-                DB::table('skills')->where('user_idx', auth()->user()->id)->update(['data'=>$response,'updated_dt'=>now()]);
+                DB::table('skills')->where('user_idx', auth()->user()->idx)->update(['data'=>$response,'updated_dt'=>now()]);
                 Log::info('Update Skill Data Success');
             } catch (QueryException $e){
                 Log::info('Update Skill Data Fail');
@@ -145,7 +147,7 @@ class SkillController extends Controller
     public function show()
     {
         // 사용자 아이디 기반 조회
-        $check_data = \App\Skill::where('user_idx', auth()->user()->id)->first();
+        $check_data = \App\Skill::where('user_idx', auth()->user()->idx)->first();
 
         // 데이터가 아예 없을 경우 생성
         if(! $check_data){
@@ -156,7 +158,7 @@ class SkillController extends Controller
         try{
             $userdata = DB::table('skills')
                 ->select(['data','updated_dt'])
-                ->where('user_idx', auth()->user()->id)
+                ->where('user_idx', auth()->user()->idx)
                 ->get()->toJson();
 
             Log::info('Select Skill Data Success');

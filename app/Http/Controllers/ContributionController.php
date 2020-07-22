@@ -77,7 +77,7 @@ class ContributionController extends Controller
         if ($response){
             try {
                 DB::table('contributions')->insert([
-                    'user_idx'=>auth()->user()->id ,
+                    'user_idx'=>auth()->user()->idx ,
                     'data'=>$response,
                     'created_dt'=>now(),
                     'updated_dt'=>now()
@@ -95,7 +95,7 @@ class ContributionController extends Controller
         $response = $this->getData();
         if($response){
             try{
-                DB::table('contributions')->where('user_idx', auth()->user()->id)->update(['data'=>$response,'updated_dt'=>now()]);
+                DB::table('contributions')->where('user_idx', auth()->user()->idx)->update(['data'=>$response,'updated_dt'=>now()]);
                 Log::info('Update Contribution Data Success');
             } catch (QueryException $e){
                 Log::info('Update Contribution Data Fail');
@@ -112,7 +112,7 @@ class ContributionController extends Controller
     public function show()
     {
         // 사용자 아이디 기반 조회
-        $check_data = \App\Contribution::where('user_idx', auth()->user()->id)->first();
+        $check_data = \App\Contribution::where('user_idx', auth()->user()->idx)->first();
 
         // 데이터가 아예 없을 경우 생성
         if(! $check_data){
@@ -123,7 +123,7 @@ class ContributionController extends Controller
         try{
             $userdata = DB::table('contributions')
                 ->select(['data','updated_dt'])
-                ->where('user_idx', auth()->user()->id)
+                ->where('user_idx', auth()->user()->idx)
                 ->get()->toJson();
 
             Log::info('Select Contribution Data Success');

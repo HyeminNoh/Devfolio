@@ -20,7 +20,7 @@ class CreateRepositoriesTable extends Migration
             $table->dateTime('created_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('updated_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
 
-            $table->foreign('user_idx')->references('id')->on('users')
+            $table->foreign('user_idx')->references('idx')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

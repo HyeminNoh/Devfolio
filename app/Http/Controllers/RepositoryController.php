@@ -100,7 +100,7 @@ class RepositoryController extends Controller
         if ($response){
             try {
                 DB::table('repositories')->insert([
-                    'user_idx'=>auth()->user()->id ,
+                    'user_idx'=>auth()->user()->idx ,
                     'data'=>$response,
                     'created_dt'=>now(),
                     'updated_dt'=>now()
@@ -118,7 +118,7 @@ class RepositoryController extends Controller
         $response = $this->getData();
         if($response){
             try{
-                DB::table('repositories')->where('user_idx', auth()->user()->id)->update(['data'=>$response,'updated_dt'=>now()]);
+                DB::table('repositories')->where('user_idx', auth()->user()->idx)->update(['data'=>$response,'updated_dt'=>now()]);
                 Log::info('Update Pinned Repository Data Success');
             } catch (QueryException $e){
                 Log::info('Update Pinned Repository Data Fail');
@@ -135,7 +135,7 @@ class RepositoryController extends Controller
     public function show()
     {
         // 사용자 아이디 기반 조회
-        $check_data = \App\repository::where('user_idx', auth()->user()->id)->first();
+        $check_data = \App\repository::where('user_idx', auth()->user()->idx)->first();
 
         // 데이터가 아예 없을 경우 생성
         if(! $check_data){
@@ -146,7 +146,7 @@ class RepositoryController extends Controller
         try{
             $userdata = DB::table('repositories')
                 ->select(['data','updated_dt'])
-                ->where('user_idx', auth()->user()->id)
+                ->where('user_idx', auth()->user()->idx)
                 ->get()->toJson();
 
             Log::info('Select Pinned Repository Data Success');
