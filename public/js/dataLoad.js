@@ -147,65 +147,81 @@ function skillsLoad() {
 function drawSkillChart(data) {
     document.getElementById('skill-updated-text').innerHTML="Last Updated: "+data[0].updated_dt
 
-    console.log(JSON.parse(data[0].data));
     data = JSON.parse(data[0].data);
-    const values = []
-    for(let lanName in data) {
-        values.concat(data[lanName].size)
+
+    // size 기준 내림차순 정렬
+    data.sort(function (a, b) {
+        return b.size - a.size;
+    })
+
+    let labels = []
+    let values = []
+    let colors = []
+    let etcSize = 0;
+    for(let i=0; i<data.length; i++){
+        if(i<10){
+            labels.push(data[i].name)
+            values.push(data[i].size)
+            colors.push(data[i].color)
+        }
+        else{
+            etcSize+=data[i].size
+        }
+    }
+    if(data.length>10) {
+        labels.push("etc")
+        values.push(etcSize)
+        colors.push("#C0C0C0")
     }
     // 그래프
     const chartDiv = document.getElementById('pie-chart-div')
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
+    const chart = document.createElement("canvas")
+    const chartContext = chart.getContext('2d')
+    new Chart(chartContext, {
+        // The type of chart we want to create
+        type: 'doughnut',
+
+        // The data for our dataset
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
+                data: values,
+                backgroundColor: colors,
+                borderColor: colors,
+            }],
+            labels: labels
         },
+
+        // Configuration options go here
         options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+            legend: {
+                display: false,
             }
         }
-    });
-    chartDiv.append(canvas)
+    })
+    chartDiv.append(chart)
 
     // 텍스트 설명
     const chartDescDiv = document.getElementById('chart-desc-div');
-    const textCol = document.createElement('div')
-    for(let lanName in data) {
-        const descriptionRow = document.createElement("div")
-        descriptionRow.className="row"
-        descriptionRow.style.marginLeft = "1em"
-        descriptionRow.innerHTML="<p><i class='fas fa-circle' style='color:"+data[lanName].color+" '></i>&nbsp;&nbsp;"+lanName+": "+data[lanName].size+" lines</p>"
-        textCol.append(descriptionRow)
+    const textCol1 = document.createElement('div')
+    textCol1.className="col"
+    const textCol2 = document.createElement('div')
+    textCol2.className="col"
+    for(let i=0; i<values.length/2; i++) {
+        const descriptionRow1 = document.createElement("div")
+        descriptionRow1.className="row"
+        descriptionRow1.style.marginLeft = "1em"
+        descriptionRow1.innerHTML="<p><i class='fas fa-circle' style='color:"+colors[i]+" '></i>&nbsp;&nbsp;"+labels[i]+": "+values[i]+" lines</p>"
+        textCol1.append(descriptionRow1)
     }
-    chartDescDiv.append(textCol)
+    for(let j=parseInt(values.length/2); j<values.length; j++){
+        const descriptionRow2 = document.createElement("div")
+        descriptionRow2.className="row"
+        descriptionRow2.style.marginLeft = "1em"
+        descriptionRow2.innerHTML="<p><i class='fas fa-circle' style='color:"+colors[j]+" '></i>&nbsp;&nbsp;"+labels[j]+": "+values[j]+" lines</p>"
+        textCol2.append(descriptionRow2)
+    }
+    chartDescDiv.append(textCol1)
+    chartDescDiv.append(textCol2)
 }
 
 function skillsUpdate() {
