@@ -4,21 +4,25 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-6 col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div>
-                            <img src="{{ auth()->user()->avatar }}" width="100%;">
-                        </div>
-                        <div style="margin-top: 1em;">
-                            <h3>
-                                {{ auth()->user()->github_id }}
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col" style="text-align: right">
-                                <a style="color: gray" href={{ auth()->user()->github_url }}>Github <i class="fab fa-github"></i></a>
+                <div class="row">
+                    <div class="col" style="margin-top:1em;">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <img src="{{ auth()->user()->avatar }}" width="100%;">
+                                </div>
+                                <div style="margin-top: 1em;">
+                                    <h3>
+                                        {{ auth()->user()->github_id }}
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col" style="text-align: right">
+                                        <a style="color: gray" href={{ auth()->user()->github_url }}>Github <i class="fab fa-github"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -26,7 +30,7 @@
             </div>
             <div class="col-12 col-md-8">
                 <div class="row">
-                    <div class="col">
+                    <div class="col" style="margin-top:1em;">
                         <div class="card">
                             <div class="card-header">
                                 <div class="row">
@@ -69,7 +73,12 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col text-right">
+                                        <p id="skill-updated-text" style="color: gray">Last Updated: </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
                                         <div class="card">
                                             <div id="pie-chart-div" class="card-body">
                                                 <div class="d-flex justify-content-center">
@@ -80,14 +89,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col text-right">
-                                                <p id="skill-updated-text" style="color: gray">Last Updated: </p>
+                                    <div class="col-lg-12 col-md-12">
+                                        <div id="chart-desc-div" class="row" style="margin-top: 1em">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="spinner-border text-secondary" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div id="chart-desc-div" class="row">
-                                            <p>Loading...</p>
                                         </div>
                                     </div>
                                 </div>
@@ -130,6 +138,11 @@
 
 @push('scripts')
     <script src="{{ asset('js/dataLoad.js') }}"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    <!-- Load d3.js & color scale -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 @endpush
