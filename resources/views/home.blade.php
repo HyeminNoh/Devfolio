@@ -49,10 +49,14 @@
                                         <p id="calendar-updated-text" style="color: gray">Last Updated: </p>
                                     </div>
                                 </div>
-                                <div id="calendar-div">
-                                    <div class="d-flex justify-content-center">
-                                        <div class="spinner-border text-secondary" role="status">
-                                            <span class="sr-only">Loading...</span>
+                                <div class="row">
+                                    <div class="col">
+                                        <div id="cal-div">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="spinner-border text-secondary" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -145,6 +149,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <!-- Load d3.js & color scale -->
-    <script src="https://d3js.org/d3.v4.js"></script>
-    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
 @endpush
