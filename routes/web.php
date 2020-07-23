@@ -16,12 +16,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if(Auth::check()){ // 로그인이 완료된 사용자
-        return redirect('home');
+        return redirect('/home');
     }
     return view('welcome');
 })->name('root');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', function (){
+    return view('home');
+});
 
 /* social login */
 Route::get('social/{provider}',[
