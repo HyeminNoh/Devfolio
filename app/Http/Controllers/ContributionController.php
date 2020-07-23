@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contribution;
+use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\QueryException;
@@ -61,8 +62,13 @@ class ContributionController extends Controller
 
             // 데이터 파싱
             $responseArray = json_decode($response);
+            $parsedValue = $this->parsing($responseArray->data->user->contributionsCollection->contributionCalendar);
 
-            return json_encode($responseArray->data->user->contributionsCollection->contributionCalendar);
+            if (empty($parsedValue)) {
+                Log::info('Parsing data is fail');
+                return false;
+            }
+            return json_encode($parsedValue);
 
         } catch (GuzzleException $e) {
             // api 오류 처리
@@ -70,6 +76,31 @@ class ContributionController extends Controller
             Log::debug("Calling API Error Message: \n" . $e);
             return false;
         }
+    }
+
+    public function parsing(object $data)
+    {
+        $dailyData = array();
+        $colors = $data->colors;
+        $totalContributions = $data->totalContributions;
+
+        if (empty($data)) {
+            Log::info('Data for parsing is empty');
+            return false;
+        }
+
+        foreach ($data->weeks as $week) {
+            foreach($week->contributionDays as $day){
+                $timeToSeconds = new Datetime($day->date);
+                $dailyData[$timeToSeconds->format('U')] = $day->contributionCount;
+            }
+        }
+
+        return [
+            'colors' => $colors,
+            'totalContributions' => $totalContributions,
+            'dailyData' => $dailyData
+        ];
     }
 
     /**
