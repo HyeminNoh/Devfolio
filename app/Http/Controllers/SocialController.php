@@ -80,13 +80,13 @@ class SocialController extends Controller
             // 새로운 사용자 추가
             if(! $user) {
                 $user = User::create([
-                    'name' => (!empty($socialData->getName())) ?: $userNickname,
+                    'name' => $socialData->getName() ?: $userNickname,
                     'email' => $userMail,
                     'github_id' => $userNickname,
                     'access_token' => $socialData->token,
-                    'github_url' => (!empty($socialData->user['html_url'])) ?: '',
-                    'blog_url' => (!empty($socialData->user['blog'])) ?: '',
-                    'avatar' => (!empty($socialData->getAvatar())) ?: '',
+                    'github_url' => $socialData->user['html_url'] ?: '',
+                    'blog_url' => $socialData->user['blog'] ?: '',
+                    'avatar' => $socialData->getAvatar() ?: '',
                     'updated_dt' => $nowDt,
                     'created_dt' => $nowDt
                 ]);
