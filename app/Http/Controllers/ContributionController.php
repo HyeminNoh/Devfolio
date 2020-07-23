@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Contribution;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
-use App\Contribution;
 
 class ContributionController extends Controller
 {
@@ -16,12 +16,13 @@ class ContributionController extends Controller
         $this->middleware('auth');
     }
 
-    public function getData(){
+    public function getData()
+    {
         // 사용자 토큰 활용 api call
         $endpoint = "https://api.github.com/graphql";
         $authToken = auth()->user()->access_token;
         $query = 'query {
-                    user(login: "'.auth()->user()->github_id.'") {
+                    user(login: "' . auth()->user()->github_id . '") {
                         contributionsCollection {
                             contributionCalendar {
                                 colors
@@ -66,7 +67,7 @@ class ContributionController extends Controller
         } catch (GuzzleException $e) {
             // api 오류 처리
             Log::info("Calling API for Contribution Calendar Data Fail");
-            Log::debug("Calling API Error Message: \n".$e);
+            Log::debug("Calling API Error Message: \n" . $e);
             return false;
         }
     }
@@ -81,23 +82,23 @@ class ContributionController extends Controller
         $response = $this->getData();
         $nowDt = now();
 
-        if (empty($response)){
-            Log::info('Storing data is fail');
+        if (empty($response)) {
+            Log::info('Data for storing is empty');
             return false;
         }
 
         try {
             Contribution::create([
-                'user_idx'=>auth()->user()->idx ,
-                'data'=>$response,
-                'created_dt'=>$nowDt,
-                'updated_dt'=>$nowDt
+                'user_idx' => auth()->user()->idx,
+                'data' => $response,
+                'created_dt' => $nowDt,
+                'updated_dt' => $nowDt
             ]);
             Log::info('Insert Contribution Data Success');
             return true;
-        } catch(QueryException $e){
+        } catch (QueryException $e) {
             Log::info('Insert Contribution Data Fail');
-            Log::debug("Insert Error Message: \n".$e);
+            Log::debug("Insert Error Message: \n" . $e);
             return false;
         }
     }
@@ -110,17 +111,18 @@ class ContributionController extends Controller
     public function update()
     {
         $response = $this->getData();
-        if(empty($response)) {
-            Log::info('Updating data is fail');
+        if (empty($response)) {
+            Log::info('Data for updating is empty');
             return false;
         }
-        try{
-            Contribution::where('user_idx', auth()->user()->idx)->update(['data'=>$response,'updated_dt'=>now()]);
+        try {
+            Contribution::where('user_idx', auth()->user()->idx)
+                ->update(['data' => $response, 'updated_dt' => now()]);
             Log::info('Update Contribution Data Success');
             return true;
-        } catch (QueryException $e){
+        } catch (QueryException $e) {
             Log::info('Update Contribution Data Fail');
-            Log::debug("Update Error Message: \n".$e);
+            Log::debug("Update Error Message: \n" . $e);
             return false;
         }
     }
@@ -136,21 +138,21 @@ class ContributionController extends Controller
         $checkData = Contribution::where('user_idx', auth()->user()->idx)->first();
 
         // 데이터가 아예 없을 경우 생성
-        if(empty($checkData)){
+        if (empty($checkData)) {
             $this->store();
         }
 
         // 조회
-        try{
-            $userData = Contribution::select(['data','updated_dt'])
+        try {
+            $userData = Contribution::select(['data', 'updated_dt'])
                 ->where('user_idx', auth()->user()->idx)
                 ->get()->toJson();
 
             Log::info('Select Contribution Data Success');
             return $userData;
-        } catch (QueryException $e){
+        } catch (QueryException $e) {
             Log::info('Select Contribution Data Fail');
-            Log::debug("Select Error Message: \n".$e);
+            Log::debug("Select Error Message: \n" . $e);
             return false;
         }
     }
