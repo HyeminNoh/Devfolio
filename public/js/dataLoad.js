@@ -94,7 +94,7 @@ function drawCalendar(data) {
     const minDate = new Date(new Date(startUnixTime*1000).getFullYear(), new Date(startUnixTime*1000).getMonth())
     const lastUnixTime = dataKeyList[dataKeyList.length-1]
     const maxDate = new Date(new Date(lastUnixTime*1000).getFullYear(), new Date(lastUnixTime*1000).getMonth())
-    const startDate = new Date(new Date(lastUnixTime*1000).getFullYear(), new Date(lastUnixTime*1000).getMonth()-6)
+    const startDate = new Date(new Date(lastUnixTime*1000).getFullYear(), new Date(lastUnixTime*1000).getMonth()-5)
     const colors = contributions.colors
 
     const cal = new CalHeatMap();
