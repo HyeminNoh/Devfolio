@@ -9,7 +9,7 @@ window.onload = function () {
 function calendarUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/contributions/update",
+        url: "http://127.0.0.1:8000/contribution/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
@@ -20,7 +20,7 @@ function calendarUpdate() {
 function calendarLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/contributions/show",
+        url: "http://127.0.0.1:8000/contribution/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -31,7 +31,7 @@ function calendarLoad() {
         $('div#calendar-div').empty();
         const calendarDiv = document.getElementById('calendar-div')
         const failTxt = document.createElement("h4")
-        failTxt.innerText="데이터가 없습니다."
+        failTxt.innerText="데이터로드에 실패했습니다."
         calendarDiv.append(failTxt)
     });
 }
@@ -51,7 +51,7 @@ function drawCalendar(data) {
 function repositoriesLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/repositories/show",
+        url: "http://127.0.0.1:8000/repository/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -113,7 +113,7 @@ function drawRepositCard(data) {
 function repositoriesUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/repositories/update",
+        url: "http://127.0.0.1:8000/repository/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
@@ -126,7 +126,7 @@ function repositoriesUpdate() {
 function skillsLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/skills/show",
+        url: "http://127.0.0.1:8000/skill/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -227,7 +227,7 @@ function drawSkillChart(data) {
 function skillsUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/skills/update",
+        url: "http://127.0.0.1:8000/skill/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
