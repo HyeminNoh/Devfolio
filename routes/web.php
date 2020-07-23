@@ -34,40 +34,38 @@ Route::get('auth/logout', [
     'uses' => 'SessionsController@destroy',
 ]);
 
-Route::get('contributions/store', [
+Route::get('contribution/store', [
     'as'=>'contribution.store',
     'uses' => 'ContributionController@store'
 ]);
 
-Route::get('contributions/update', [
+Route::get('contribution/update', [
     'as'=>'contribution.update',
     'uses' => 'ContributionController@update'
 ]);
 
-Route::get('contributions/show', 'ContributionController@show');
+Route::get('contribution/show', 'ContributionController@show');
 
-Route::get('repositories/store', [
+Route::get('repository/store', [
     'as'=>'repository.store',
     'uses' => 'RepositoryController@store'
 ]);
 
-Route::get('repositories/update', [
+Route::get('repository/update', [
     'as'=>'repository.update',
     'uses' => 'RepositoryController@update'
 ]);
 
-Route::get('repositories/show', 'RepositoryController@show');
+Route::get('repository/show', 'RepositoryController@show');
 
-Route::get('skills/store', [
+Route::get('skill/store', [
     'as'=>'skill.store',
     'uses' => 'SkillController@store'
 ]);
 
-Route::get('skills/update', [
+Route::get('skill/update', [
     'as'=>'skill.update',
     'uses' => 'SkillController@update'
 ]);
 
-Route::get('skills/show', 'SkillController@show');
-
-// Route::get('/user/detail', 'UserController@show');
+Route::get('skill/show', 'SkillController@show');
