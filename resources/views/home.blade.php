@@ -91,9 +91,11 @@
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div id="chart-desc-div" class="row" style="margin-top: 1em">
-                                            <div class="d-flex justify-content-center">
-                                                <div class="spinner-border text-secondary" role="status">
-                                                    <span class="sr-only">Loading...</span>
+                                            <div class="col">
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="spinner-border spinner-border m-5 text-secondary" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
