@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Contribution;
 
@@ -15,8 +14,6 @@ class ContributionController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        // $this->loginUser = auth()->user();
-        // Log::info(json_encode($this->loginUser));
     }
 
     public function getData(){
@@ -101,6 +98,7 @@ class ContributionController extends Controller
         } catch(QueryException $e){
             Log::info('Insert Contribution Data Fail');
             Log::debug("Insert Error Message: \n".$e);
+            return false;
         }
     }
 
@@ -123,6 +121,7 @@ class ContributionController extends Controller
         } catch (QueryException $e){
             Log::info('Update Contribution Data Fail');
             Log::debug("Update Error Message: \n".$e);
+            return false;
         }
     }
 
@@ -137,7 +136,7 @@ class ContributionController extends Controller
         $checkData = Contribution::where('user_idx', auth()->user()->idx)->first();
 
         // 데이터가 아예 없을 경우 생성
-        if(! $checkData){
+        if(empty($checkData)){
             $this->store();
         }
 
@@ -152,6 +151,7 @@ class ContributionController extends Controller
         } catch (QueryException $e){
             Log::info('Select Contribution Data Fail');
             Log::debug("Select Error Message: \n".$e);
+            return false;
         }
     }
 }
