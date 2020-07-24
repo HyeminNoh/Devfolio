@@ -9,7 +9,7 @@ window.onload = function () {
 function calendarUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/contribution/update",
+        url: "http://127.0.0.1:8000/report/contribution/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
@@ -20,7 +20,7 @@ function calendarUpdate() {
 function calendarLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/contribution/show",
+        url: "http://127.0.0.1:8000/report/contribution/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -139,7 +139,7 @@ function drawCalendar(data) {
 function repositoriesLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/repository/show",
+        url: "http://127.0.0.1:8000/report/repo/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -201,7 +201,7 @@ function drawRepositCard(data) {
 function repositoriesUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/repository/update",
+        url: "http://127.0.0.1:8000/report/repo/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
@@ -214,7 +214,7 @@ function repositoriesUpdate() {
 function skillsLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/skill/show",
+        url: "http://127.0.0.1:8000/report/skill/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -281,9 +281,28 @@ function drawSkillChart(data) {
 
         // Configuration options go here
         options: {
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        //get the concerned dataset
+                        var dataset = data.datasets[tooltipItem.datasetIndex];
+                        //calculate the total of this data set
+                        var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                            return previousValue + currentValue;
+                        });
+                        //get the current items value
+                        var currentValue = dataset.data[tooltipItem.index];
+                        //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
+                        var percentage = Math.floor(((currentValue/total) * 100)+0.5);
+
+                        return labels[tooltipItem.index]+" "+percentage + "%";
+                    }
+                }
+            },
             legend: {
-                display: false,
-            }
+                display: true,
+                position: 'right',
+            },
         }
     })
     chartDiv.append(chart)
@@ -315,7 +334,7 @@ function drawSkillChart(data) {
 function skillsUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/skill/update",
+        url: "http://127.0.0.1:8000/report/skill/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
