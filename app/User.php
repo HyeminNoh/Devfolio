@@ -20,15 +20,7 @@ class User extends Authenticatable
         'name', 'email', 'github_id', 'access_token', 'avatar', 'github_url', 'blog_url',
     ];
 
-    public function contribution(){
-        return $this->belongsTo(Contribution::class);
-    }
-
-    public function repository(){
-        return $this->belongsTo(Repository::class);
-    }
-
-    public function skill(){
-        return $this->belongsTo(Skill::class);
+    public function report(){
+        return $this->belongsTo(Report::class);
     }
 }
