@@ -108,7 +108,7 @@ class ReportRepository implements ReportInterface
                             }
                         }
                       }
-                }';;
+                }';
                 break;
             case 'skill':
                 $query = 'query {
@@ -132,7 +132,7 @@ class ReportRepository implements ReportInterface
                             }
                         }
                     }
-                }';;
+                }';
                 break;
             case 'repo':
                 $query = 'query {
@@ -174,7 +174,7 @@ class ReportRepository implements ReportInterface
                           }
                         }
                       }
-                ';;
+                ';
                 break;
         }
         $client = new Client();
