@@ -36,38 +36,9 @@ Route::get('auth/logout', [
     'uses' => 'SessionsController@destroy',
 ]);
 
-Route::get('contribution/store', [
-    'as'=>'contribution.store',
-    'uses' => 'ContributionController@store'
-]);
-
-Route::get('contribution/update', [
-    'as'=>'contribution.update',
-    'uses' => 'ContributionController@update'
-]);
-
-Route::get('contribution/show', 'ContributionController@show');
-
-Route::get('repository/store', [
-    'as'=>'repository.store',
-    'uses' => 'RepositoryController@store'
-]);
-
-Route::get('repository/update', [
-    'as'=>'repository.update',
-    'uses' => 'RepositoryController@update'
-]);
-
-Route::get('repository/show', 'RepositoryController@show');
-
-Route::get('skill/store', [
-    'as'=>'skill.store',
-    'uses' => 'SkillController@store'
-]);
-
-Route::get('skill/update', [
+Route::get('report/{type}/update', [
     'as'=>'skill.update',
-    'uses' => 'SkillController@update'
+    'uses' => 'ReportController@update'
 ]);
 
-Route::get('skill/show', 'SkillController@show');
+Route::get('report/{type}/show', 'ReportController@show');
