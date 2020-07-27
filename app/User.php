@@ -21,6 +21,6 @@ class User extends Authenticatable
     ];
 
     public function report(){
-        return $this->belongsTo(Report::class);
+        return $this->hasMany(Report::class);
     }
 }
