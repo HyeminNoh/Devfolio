@@ -15,20 +15,22 @@ class ReportController extends Controller
     /**
      * Redirect the user to the Social Login Provider's authentication page.
      *
+     * @param $userIdx
      * @param string $type
      * @return bool
      */
-    public function update($type){
-        return $this->reportRepo->update($type);
+    public function update($userIdx, $type){
+        return $this->reportRepo->update($userIdx, $type);
     }
 
     /**
      * Redirect the user to the Social Login Provider's authentication page.
      *
+     * @param $userIdx
      * @param string $type
      * @return string
      */
-    public function show($type){
-        return $this->reportRepo->show($type);
+    public function show($userIdx, $type){
+        return $this->reportRepo->get($userIdx, $type);
     }
 }
