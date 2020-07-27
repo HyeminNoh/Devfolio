@@ -15,14 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if(Auth::check()){ // 로그인이 완료된 사용자
-        return redirect('/home');
-    }
     return view('welcome');
 })->name('root');
 
-Route::get('/home', function (){
-    return view('home');
+Route::get('portfolio/{userIdx}', function ($userIdx){
+    return view('portfolio');
 });
 
 /* social login */
@@ -36,9 +33,9 @@ Route::get('auth/logout', [
     'uses' => 'SessionsController@destroy',
 ]);
 
-Route::get('report/{type}/update', [
+Route::get('report/{userIdx}/{type}/update', [
     'as'=>'skill.update',
     'uses' => 'ReportController@update'
 ]);
 
-Route::get('report/{type}/show', 'ReportController@show');
+Route::get('report/{userIdx}/{type}/show', 'ReportController@show');
