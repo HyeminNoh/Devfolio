@@ -94,7 +94,7 @@ class SocialController extends Controller
             }
             auth()->login($user);
             Log::info('Sign in: '.auth()->user()->name);
-            return redirect(route('home'));
+            return redirect(route('portfolio/'.auth()->user()->idx));
         } catch (\Exception $e){
             Log::info('Github Login Fail');
             Log::debug('Github Login Error Message');
