@@ -1,15 +1,16 @@
+let userIdx;
 window.onload = function () {
+    this.userIdx = window.location.pathname.split("/").pop();
     calendarLoad()
     repositoriesLoad()
     skillsLoad()
 }
-
 /* Contribution 달력 차트 데이터 로드 & 컴포넌트 생성 */
 
 function calendarUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/report/contribution/update",
+        url: "http://127.0.0.1:8000/report/"+this.userIdx+"/contribution/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
@@ -20,7 +21,7 @@ function calendarUpdate() {
 function calendarLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/report/contribution/show",
+        url: "http://127.0.0.1:8000/report/"+this.userIdx+"/contribution/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -139,7 +140,7 @@ function drawCalendar(data) {
 function repositoriesLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/report/repo/show",
+        url: "http://127.0.0.1:8000/report/"+this.userIdx+"/repository/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -167,7 +168,6 @@ function drawRepositCard(data) {
     data = JSON.parse(data[0].data)
     if(data.totalCount) {
         data.edges.forEach(function (edge) {
-            // console.log(edge)
             const node = edge.node // Json obejct
 
             const col = document.createElement('div')
@@ -180,9 +180,48 @@ function drawRepositCard(data) {
             const cardBody = document.createElement('div')
             cardBody.className = "card-body"
 
-            // 카드 바디 안에 내용 채우기
-            cardBody.innerHTML = "<a href=" + node.url + "><h5>" + node.name + "</h5></a><hr><p>" + node.description + "</p>"
+            const title = document.createElement('div')
+            const description = document.createElement('div')
+            const stat = document.createElement('div')
+            stat.className="row"
+            const leftRow = document.createElement('div')
+            leftRow.className="row"
+            const leftCol = document.createElement('div')
+            leftCol.className="col"
+            const rightCol = document.createElement('div')
+            rightCol.className="col"
+            rightCol.style.textAlign="right"
+            const stargazer = document.createElement('col')
+            stargazer.style.marginLeft="1em"
+            const language = document.createElement('col')
+            language.style.marginLeft="0.3em"
+            const fork = document.createElement('col')
+            fork.style.marginLeft="0.3em"
 
+            title.innerHTML="<a href=" + node.url + "><h5>" + node.name + "</h5></a><hr>"
+            description.innerHTML = "<p>"+node.description+"</p>"
+            if(node.stargazers.totalCount!==0){
+                stargazer.innerHTML="<p style='color:#808080;'><i class=\"fas fa-star\" style=\"color: #808080\"></i>&nbsp"+node.stargazers.totalCount+"</p>"
+            }
+            if(node.primaryLanguage) {
+                language.innerHTML = "<p style='color:#808080;'><i class=\"fas fa-circle\" style='color:"+node.primaryLanguage.color+"'></i>&nbsp" + node.primaryLanguage.name + "</p>"
+            }
+            if(node.forkCount!==0) {
+                fork.innerHTML = "<p style='color:#808080;'><i class=\"fas fa-code-branch\" style=\"color: #808080\"></i>&nbsp" + node.stargazers.totalCount + "</p>"
+            }
+
+            rightCol.innerHTML = "<p>"+node.diskUsage+" KB</p>"
+
+            leftRow.append(stargazer)
+            leftRow.append(language)
+            leftRow.append(fork)
+            leftCol.append(leftRow)
+            // 카드 바디 안에 내용 채우기
+            stat.append(leftCol)
+            stat.append(rightCol)
+            cardBody.append(title)
+            cardBody.append(description)
+            cardBody.append(stat)
             card.append(cardBody)
             col.append(card)
             row.append(col)
@@ -201,7 +240,7 @@ function drawRepositCard(data) {
 function repositoriesUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/report/repo/update",
+        url: "http://127.0.0.1:8000/report/"+this.userIdx+"/repository/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
@@ -214,7 +253,7 @@ function repositoriesUpdate() {
 function skillsLoad() {
     // 데이터 로드
     $.ajax({
-        url: "http://127.0.0.1:8000/report/skill/show",
+        url: "http://127.0.0.1:8000/report/"+this.userIdx+"/skill/show",
         method: "GET",
         dataType: "json"
     }).done(function (result) {
@@ -334,7 +373,7 @@ function drawSkillChart(data) {
 function skillsUpdate() {
     // 데이터 갱신
     $.ajax({
-        url: "http://127.0.0.1:8000/report/skill/update",
+        url: "http://127.0.0.1:8000/report/"+this.userIdx+"/skill/update",
         method: "GET",
         dataType: "json"
     }).always(function () {
