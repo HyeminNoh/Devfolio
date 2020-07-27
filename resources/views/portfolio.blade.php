@@ -144,6 +144,9 @@
 
 @push('scripts')
     <script src="{{ asset('js/dataLoad.js') }}"></script>
+    <script src="{{ asset('js/contributionLoad.js') }}"></script>
+    <script src="{{ asset('js/repositoryLoad.js') }}"></script>
+    <script src="{{ asset('js/skillLoad.js') }}"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
