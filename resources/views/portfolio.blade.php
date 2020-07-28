@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container" id="main-container">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-6 col-md-4">
                 <div class="row">
@@ -20,7 +20,8 @@
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="col" style="text-align: right">
-                                        <a style="color: gray" href={{ auth()->user()->github_url }}>Github <i class="fab fa-github"></i></a>
+                                        <a style="color: gray" href={{ auth()->user()->github_url }}>Github <i
+                                                class="fab fa-github"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -36,7 +37,8 @@
                                 <div class="row">
                                     <h4>📅 Contribution Calendar</h4>
                                     <div class="col text-right">
-                                        <button onclick="calendarUpdate()" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
+                                        <button onclick="calendarUpdate()" class="btn btn-light" type="button"><i
+                                                class="fas fa-sync"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +73,8 @@
                                 <div class="row">
                                     <h4>📊 Skills</h4>
                                     <div class="col" style="text-align: right">
-                                        <button onclick="skillsUpdate()" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
+                                        <button onclick="skillsUpdate()" class="btn btn-light" type="button"><i
+                                                class="fas fa-sync"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -97,7 +100,8 @@
                                         <div id="chart-desc-div" class="row" style="margin-top: 1em">
                                             <div class="col">
                                                 <div class="d-flex justify-content-center">
-                                                    <div class="spinner-border spinner-border m-5 text-secondary" role="status">
+                                                    <div class="spinner-border spinner-border m-5 text-secondary"
+                                                         role="status">
                                                         <span class="sr-only">Loading...</span>
                                                     </div>
                                                 </div>
@@ -116,7 +120,8 @@
                                 <div class="row">
                                     <h4>📌 Pinned Repository</h4>
                                     <div class="col" style="text-align: right">
-                                        <button onclick="repositoriesUpdate()" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
+                                        <button onclick="repositoriesUpdate()" class="btn btn-light" type="button"><i
+                                                class="fas fa-sync"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -139,6 +144,26 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="repoModal" tabindex="-1" role="dialog" aria-labelledby="repoModalTitle"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="repoModalTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -154,5 +179,5 @@
     <!-- Load d3.js & color scale -->
     <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css"/>
 @endpush
