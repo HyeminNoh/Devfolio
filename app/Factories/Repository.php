@@ -3,14 +3,18 @@
 namespace App\Factories;
 
 use App\User;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
 class Repository extends AbstractReport
 {
     private $resultArray = [];
-
+    private $token;
     public function __construct($userIdx)
     {
+        $user = User::find($userIdx);
+        $this->token = $user->access_token;
         $this->setData($userIdx);
     }
 
@@ -21,9 +25,8 @@ class Repository extends AbstractReport
 
     public function setData($userIdx)
     {
-        $user = User::find($userIdx);
         $query = 'query {
-                    user(login: "' . $user->github_id . '") {
+                    user(login: "HyeminNoh") {
                         email
                         pinnedItems(first: 6, types: [REPOSITORY]) {
                             totalCount
@@ -31,6 +34,7 @@ class Repository extends AbstractReport
                               node {
                                 ... on Repository {
                                   name
+                                  nameWithOwner
                                   description
                                   forkCount
                                   stargazers {
@@ -60,14 +64,48 @@ class Repository extends AbstractReport
                             }
                           }
                         }
-                      }
-                ';
-        $apiResponse = $this->callApi($user->access_token, $query, 'Repository');
+                      }';
+        $apiResponse = $this->callApi($this->token, $query, 'Repository');
         $this->parseData($apiResponse);
     }
 
+    public function getAdditionalData($repoNameWithOwner, $token){
+        $client = new Client();
+        try {
+            $response = $client->request('GET', 'https://api.github.com/repos/'.$repoNameWithOwner . '/contributors', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $token,
+                    'Accept' => 'application/json'
+                ]
+            ])->getBody();
+            Log::info("Calling ".$repoNameWithOwner."data is Success");
+            return $response;
+        } catch (GuzzleException $e) {
+            // api 오류 처리
+            Log::info("Calling".$repoNameWithOwner."data is Fail");
+            Log::debug("Calling API Error Message: \n" . $e);
+            return false;
+        }
+    }
     public function parseData($apiResponse)
     {
-        $this->resultArray = $apiResponse->data->user->pinnedItems;
+        $repositories = $apiResponse->data->user->pinnedItems->edges;
+        foreach ($repositories as $repo) {
+            $repoData = $repo->node;
+            $contributor = $this->getAdditionalData($repoData->nameWithOwner, $this->token);
+            $repoArray = array([
+                'name' => $repoData->name,
+                'description' => $repoData->description,
+                'forkCount' => $repoData->forkCount,
+                'totalCount' => $repoData->stargazers->totalCount,
+                'url' => $repoData->url,
+                'homepageUrl' => $repoData->homepageUrl,
+                'diskUsage' => $repoData->diskUsage,
+                'primaryLanguage' => $repoData->primaryLanguage,
+                'languages' => $repoData->languages,
+                'contributor' => $contributor
+            ]);
+            array_push($this->resultArray, $repoArray[0]);
+        }
     }
 }
