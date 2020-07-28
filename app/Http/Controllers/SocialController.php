@@ -43,7 +43,9 @@ class SocialController extends Controller
      */
     protected function redirectToProvider($provider)
     {
-        return Socialite::driver($provider)->redirect();
+        return Socialite::driver($provider)
+            ->scopes(['read:user', 'public_repo'])
+            ->redirect();
     }
 
     /**
