@@ -78,7 +78,7 @@ class Repository extends AbstractReport
                     'Accept' => 'application/json'
                 ]
             ])->getBody();
-            Log::info("Calling ".$repoNameWithOwner."data is Success");
+            Log::info("Calling ".$repoNameWithOwner." data is Success");
             return $response;
         } catch (GuzzleException $e) {
             // api 오류 처리
@@ -93,6 +93,7 @@ class Repository extends AbstractReport
         foreach ($repositories as $repo) {
             $repoData = $repo->node;
             $contributor = $this->getAdditionalData($repoData->nameWithOwner, $this->token);
+            // Log::info($contributor);
             $repoArray = array([
                 'name' => $repoData->name,
                 'description' => $repoData->description,
@@ -103,7 +104,7 @@ class Repository extends AbstractReport
                 'diskUsage' => $repoData->diskUsage,
                 'primaryLanguage' => $repoData->primaryLanguage,
                 'languages' => $repoData->languages,
-                'contributor' => $contributor
+                'contributor' => json_decode($contributor)
             ]);
             array_push($this->resultArray, $repoArray[0]);
         }
