@@ -149,14 +149,54 @@
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="repoModalTitle">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        ...
+                    <div class="modal-body" id="repoModalBody">
+                        <div class="row" style="margin: 0.01em;">
+                            <div class="col" style="margin-top: 0.5em;">
+                                <a id="titleLink"><h4 id="repoModalTitle">Modal title</h4></a>
+                            </div>
+                            <div class="col" style="text-align: right; margin-top: 0.5em;">
+                                <p id="modalCount" style="color:#808080;"></p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 0.1em;">
+                            <div id="ModalPageUrl" class="col">
+                            </div>
+                        </div>
+                        <div class="row bg-light" style="margin: 0.1em;">
+                            <div class="col">
+                                <p id="repoModalDesc" style="margin-top: 1em;">Description</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row" style="margin: 0.1em;">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5>Languages</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="modalLangChart" class="col" style="margin: 1em;">
+                                    </div>
+                                    <div id="modalLangDesc" class="col">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row" style="margin: 0.2em;">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5>Contributors</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="contriProfileCol" class="col"></div>
+                                    <div id="contriChartDiv" class="col"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
