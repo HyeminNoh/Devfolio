@@ -40,15 +40,13 @@ function drawRepositCards(data) {
 
     // pinned reposit 정보만 추출
     data = JSON.parse(data[0].data)
-    if(data.totalCount) {
-        data.edges.forEach(function (edge) {
-            const node = edge.node // Json obejct
-
+    console.log(data)
+    if(data) {
+        data.forEach(function (node) {
             const col = document.createElement('div')
             col.className = "col-lg-6 col-md-12"
             col.style.padding = "1em"
 
-            makeModal(node)
             const card = makeCard(node)
             col.append(card)
             row.append(col)
@@ -91,14 +89,14 @@ function makeCard(node) {
 
     title.innerHTML="<a href=" + node.url + "><h5>" + node.name + "</h5></a><hr>"
     description.innerHTML = "<p>"+node.description+"</p>"
-    if(node.stargazers.totalCount!==0){
-        stargazer.innerHTML="<p style='color:#808080;'><i class=\"fas fa-star\" style=\"color: #808080\"></i>&nbsp"+node.stargazers.totalCount+"</p>"
+    if(node.totalCount!==0){
+        stargazer.innerHTML="<p style='color:#808080;'><i class=\"fas fa-star\" style=\"color: #808080\"></i>&nbsp"+node.totalCount+"</p>"
     }
     if(node.primaryLanguage) {
         language.innerHTML = "<p style='color:#808080;'><i class=\"fas fa-circle\" style='color:"+node.primaryLanguage.color+"'></i>&nbsp" + node.primaryLanguage.name + "</p>"
     }
     if(node.forkCount!==0) {
-        fork.innerHTML = "<p style='color:#808080;'><i class=\"fas fa-code-branch\" style=\"color: #808080\"></i>&nbsp" + node.stargazers.totalCount + "</p>"
+        fork.innerHTML = "<p style='color:#808080;'><i class=\"fas fa-code-branch\" style=\"color: #808080\"></i>&nbsp" + node.forkCount + "</p>"
     }
 
     rightCol.innerHTML = "<p>"+node.diskUsage+" KB</p>"
@@ -106,7 +104,7 @@ function makeCard(node) {
     const stretchedLink = document.createElement('a')
     stretchedLink.className='stretched-link'
     stretchedLink.setAttribute('data-toggle', 'modal')
-    stretchedLink.href="#"+node.name+"Modal"
+    stretchedLink.href="#repoModal"
 
     leftRow.append(stargazer)
     leftRow.append(language)
@@ -124,29 +122,6 @@ function makeCard(node) {
 }
 
 function makeModal(node) {
-    const modal = document.createElement('div')
-    modal.id = node.name+'Modal'
-    modal.className = 'modal fade'
-    modal.setAttribute('role', 'dialog')
+    console.log(node)
 
-    const dialog = document.createElement('div')
-    dialog.className='modal-dialog'
-
-    const content = document.createElement('div')
-    content.className='modal-content'
-
-    const header = document.createElement('div')
-    header.innerHTML = "<button type='button' class='close' data-dismiss='modal'>&times;</button><h4 class='modal-title'>"+node.name+"</h4>"
-
-    const body = document.createElement('div')
-    body.className='modal-body'
-    body.innerHTML="<p>hi</p>"
-
-    content.append(header)
-    content.append(body)
-    dialog.append(content)
-    modal.append(dialog)
-
-    const container = document.getElementById('main-container')
-    container.append(modal)
 }
