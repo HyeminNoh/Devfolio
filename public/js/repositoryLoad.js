@@ -235,7 +235,7 @@ function makeModal(node) {
 
         const profileDesc = document.createElement('div')
         profileDesc.className='col'
-        profileDesc.innerHTML="<p><a href="+contributor[i].html_url+"><span style='font-weight: bold'>"+contributor[i].login+"</span></a> "+contributor[i].contributions+" <span style='font-size: small'>contributions</span></p>"
+        profileDesc.innerHTML="<p><a href="+contributor[i].html_url+"><span style='font-weight: bold'>"+contributor[i].login+"</span></a> "+contributor[i].contributions+" commits</p>"
 
         contributorProfile.append(profileImg)
         contributorProfile.append(profileDesc)
