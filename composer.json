@@ -18,7 +18,8 @@
         "laravel/socialite": "^4.4",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
-        "monolog/monolog": "^2.1"
+        "monolog/monolog": "^2.1",
+      "ext-simplexml": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
