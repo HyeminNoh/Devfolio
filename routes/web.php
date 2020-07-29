@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +20,8 @@ Route::get('/', function () {
 })->name('root');
 
 Route::get('portfolio/{userIdx}', function ($userIdx){
-    return view('portfolio');
+    $user = User::find($userIdx);
+    return view('portfolio', ['user' => $user]);
 });
 
 /* social login */
