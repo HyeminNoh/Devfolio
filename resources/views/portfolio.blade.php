@@ -1,26 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-6 col-md-4">
+    <div class="container-fluid">
+        <div class="row justify-content-center" style="margin-left: 5%; margin-right: 5%;">
+            <div class="col-12 col-sm-12 col-lg-2 col-md-4">
                 <div class="row">
                     <div class="col" style="margin-top:1em;">
                         <div class="card">
                             <div class="card-body">
                                 <div>
-                                    <img src="{{ auth()->user()->avatar }}" width="100%;">
+                                    <img src="{{ $user->avatar }}" width="100%;">
                                 </div>
                                 <div style="margin-top: 1em;">
                                     <h3>
-                                        {{ auth()->user()->github_id }}
+                                        {{ $user->github_id }}
                                     </h3>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="col" style="text-align: right">
-                                        <a style="color: gray" href={{ auth()->user()->github_url }}>Github <i
+                                        <a style="color: gray" href={{ $user->github_url }}>Github <i
                                                 class="fab fa-github"></i></a>
                                     </div>
                                 </div>
@@ -29,31 +29,34 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-sm-12 col-lg-10 col-md-8">
                 <div class="row">
                     <div class="col" style="margin-top:1em;">
                         <div class="card">
                             <div class="card-header">
                                 <div class="row">
-                                    <h4>📅 Contribution Calendar</h4>
-                                    <div class="col text-right">
-                                        <button onclick="calendarUpdate()" class="btn btn-light" type="button"><i
-                                                class="fas fa-sync"></i></button>
+                                    <div class="col-8" style="margin-top: 0.5em">
+                                        <h4>📅 Contribution Calendar</h4>
+                                    </div>
+                                    <div class="col" style="margin-top: 0.2em; text-align: right">
+                                        <button onclick="calendarUpdate()" class="btn btn-light" type="button">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col text-lef">
-                                        <p id="total-contribution-text">Total Contribution: </p>
+                                        <p id="total-contribution-text">Last Year Total Contribution: </p>
                                     </div>
                                     <div class="col text-right">
                                         <p id="calendar-updated-text" style="color: gray">Last Updated: </p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col">
-                                        <div id="cal-div">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+                                        <div class="row" id="cal-div">
                                             <div class="d-flex justify-content-center">
                                                 <div class="spinner-border text-secondary" role="status">
                                                     <span class="sr-only">Loading...</span>
@@ -61,33 +64,79 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-4" id="onClick-placeholder" style="text-align: right">
+                                        <p style="font-weight: bold; font-size: 1.2em"> Click your calendar ! </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col" style="margin-top:1em;">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row">
-                                    <h4>📊 Skills</h4>
-                                    <div class="col" style="text-align: right">
-                                        <button onclick="skillsUpdate()" class="btn btn-light" type="button"><i
-                                                class="fas fa-sync"></i></button>
+                    <div class="col-lg-6 col-md-12" style="margin-top:1em;">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-7" style="margin-top: 0.5em">
+                                                <h4>📊 Skills</h4>
+                                            </div>
+                                            <div class="col" style="margin-top: 0.2em; text-align: right">
+                                                <button onclick="skillsUpdate()" class="btn btn-light" type="button">
+                                                    <i class="fas fa-sync"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col text-right">
+                                                <p id="skill-updated-text" style="color: gray">Last Updated: </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="card">
+                                                    <div id="pie-chart-div" class="card-body">
+                                                        <div class="d-flex justify-content-center">
+                                                            <div class="spinner-border text-secondary" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12">
+                                                <div id="chart-desc-div" class="row" style="margin-top: 1em">
+                                                    <div class="col">
+                                                        <div class="d-flex justify-content-center">
+                                                            <div class="spinner-border spinner-border m-5 text-secondary"
+                                                                 role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col text-right">
-                                        <p id="skill-updated-text" style="color: gray">Last Updated: </p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12">
-                                        <div class="card">
-                                            <div id="pie-chart-div" class="card-body">
+                        </div>
+                        @if($user->blog_url)
+                            <div class="row">
+                                <div class="col" style="margin-top:1em;">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-7" style="margin-top: 0.5em">
+                                                    <h4>✨ Recent Blog Posts</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="blog-div">
                                                 <div class="d-flex justify-content-center">
                                                     <div class="spinner-border text-secondary" role="status">
                                                         <span class="sr-only">Loading...</span>
@@ -96,30 +145,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-md-12">
-                                        <div id="chart-desc-div" class="row" style="margin-top: 1em">
-                                            <div class="col">
-                                                <div class="d-flex justify-content-center">
-                                                    <div class="spinner-border spinner-border m-5 text-secondary"
-                                                         role="status">
-                                                        <span class="sr-only">Loading...</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col" style="margin-top:1em;">
+                    <div class="col-lg-6 col-md-12" style="margin-top:1em;">
                         <div class="card">
                             <div class="card-header">
                                 <div class="row">
-                                    <h4>📌 Pinned Repository</h4>
-                                    <div class="col" style="text-align: right">
+                                    <div class="col-7" style="margin-top: 0.5em">
+                                        <h4>📌 Pinned Repository</h4>
+                                    </div>
+                                    <div class="col" style="margin-top: 0.2em; text-align: right">
                                         <button onclick="repositoriesUpdate()" class="btn btn-light" type="button"><i
                                                 class="fas fa-sync"></i></button>
                                     </div>
@@ -212,9 +249,13 @@
     <script src="{{ asset('js/contributionLoad.js') }}"></script>
     <script src="{{ asset('js/repositoryLoad.js') }}"></script>
     <script src="{{ asset('js/skillLoad.js') }}"></script>
+    <script src="{{ asset('js/blogLoad.js') }}"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    <!-- moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js"></script>
 
     <!-- Load d3.js & color scale -->
     <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
