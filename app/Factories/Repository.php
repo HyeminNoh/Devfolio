@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class Repository extends AbstractReport
 {
-    private $resultArray = [];
+    private $resultArray = array();
     private $token;
+    private $userId;
     public function __construct($userIdx)
     {
         $user = User::find($userIdx);
+        $this->userId = $user->github_id;
         $this->token = $user->access_token;
         $this->setData($userIdx);
     }
@@ -26,7 +28,7 @@ class Repository extends AbstractReport
     public function setData($userIdx)
     {
         $query = 'query {
-                    user(login: "HyeminNoh") {
+                    user(login: "'.$this->userId.'") {
                         email
                         pinnedItems(first: 6, types: [REPOSITORY]) {
                             totalCount
@@ -86,6 +88,7 @@ class Repository extends AbstractReport
             Log::debug("Calling API Error Message: \n" . $e);
             return false;
         }
+
     }
     public function parseData($apiResponse)
     {
