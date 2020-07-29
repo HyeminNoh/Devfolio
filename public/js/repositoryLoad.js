@@ -9,12 +9,12 @@ function repositoriesLoad() {
     }).done(function (result) {
         $('div#repositories-div').empty();
         // calendar view 자리 다시 그리기
-        drawRepositCards(result);
+        drawRepositCards(result)
     }).fail(function () {
         $('div#repositories-div').empty();
         const repositDiv = document.getElementById('repositories-div')
         const failTxt = document.createElement("h4")
-        failTxt.innerText="지정된 대표 저장소가 없습니다."
+        failTxt.innerText="데이터 로드에 실패했습니다."
         repositDiv.append(failTxt)
     })
 }
@@ -40,7 +40,7 @@ function drawRepositCards(data) {
 
     // pinned reposit 정보만 추출
     data = JSON.parse(data[0].data)
-    if(data) {
+    if(data.length) {
         data.forEach(function (node) {
             const col = document.createElement('div')
             col.className = "col-lg-6 col-md-12"
