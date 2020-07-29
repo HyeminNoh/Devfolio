@@ -43,7 +43,7 @@ function drawRepositCards(data) {
     if(data.length) {
         data.forEach(function (node) {
             const col = document.createElement('div')
-            col.className = "col-lg-6 col-md-12"
+            col.className = "col-12 col-sm-12 col-md-12"
             col.style.padding = "1em"
 
             const card = makeCard(node)
