@@ -33,19 +33,16 @@ function calendarLoad() {
 function drawCalendar(data) {
     const contributions = JSON.parse(data[0].data)
     // console.log(contributions)
-    document.getElementById('total-contribution-text').innerHTML="Total Contribution: "+contributions.totalContributions
+    document.getElementById('total-contribution-text').innerHTML="Last Year Total Contribution: "+contributions.totalContributions
     document.getElementById('calendar-updated-text').innerHTML="Last Updated: "+data[0].updated_dt
 
     const calDiv = document.getElementById('cal-div')
-    const calRow = document.createElement('div')
-    calRow.className="row"
-    calRow.style.verticalAlign="center"
 
     // 이전, 다음 버튼
     const prevBtnCol = document.createElement('div')
-    prevBtnCol.className="col-auto"
+    prevBtnCol.className="col-1"
     const nextBtnCol = document.createElement('div')
-    nextBtnCol.className="col-auto"
+    nextBtnCol.className="col-1"
 
     const prevBtn = document.createElement('button')
     const nextBtn = document.createElement('button')
@@ -63,23 +60,15 @@ function drawCalendar(data) {
 
     // heatmap이 들어갈 div
     const heatmapCol = document.createElement('div')
-    heatmapCol.className="col-auto"
+    heatmapCol.className="col"
     const calHeatMap = document.createElement('div')
     calHeatMap.id="cal-heatmap"
+    calHeatMap.style.overflow="hidden"
     heatmapCol.append(calHeatMap)
 
-    // heatmap click 시 보일 텍스트 div
-    const calDescription = document.createElement('div')
-    calDescription.id = "onClick-placeholder"
-    calDescription.className = "col-auto"
-    calDescription.style.textAlign="right"
-    calDescription.innerHTML="<p>Click Your Calendar</p>"
-
-    calRow.append(prevBtnCol)
-    calRow.append(heatmapCol)
-    calRow.append(calDescription)
-    calRow.append(nextBtnCol)
-    calDiv.append(calRow)
+    calDiv.append(prevBtnCol)
+    calDiv.append(heatmapCol)
+    calDiv.append(nextBtnCol)
 
     // 차트에 사용되는 데이터
     const dailyData = contributions.dailyData
@@ -88,7 +77,7 @@ function drawCalendar(data) {
     const minDate = new Date(new Date(startUnixTime*1000).getFullYear(), new Date(startUnixTime*1000).getMonth())
     const lastUnixTime = dataKeyList[dataKeyList.length-1]
     const maxDate = new Date(new Date(lastUnixTime*1000).getFullYear(), new Date(lastUnixTime*1000).getMonth())
-    const startDate = new Date(new Date(lastUnixTime*1000).getFullYear(), new Date(lastUnixTime*1000).getMonth()-5)
+    const startDate = new Date(new Date(lastUnixTime*1000).getFullYear(), new Date(lastUnixTime*1000).getMonth()-10)
     const colors = contributions.colors
 
     const cal = new CalHeatMap();
@@ -99,7 +88,7 @@ function drawCalendar(data) {
         data: dailyData,
         domain: "month",
         subDomain: "day",
-        range: 6,
+        range: 11,
         legend: [1, 3, 5, 10],
         legendColors: ["#efefef"].concat(colors[colors.length-2]),
         legendHorizontalPosition: "right",
@@ -107,8 +96,8 @@ function drawCalendar(data) {
         previousSelector: "#prev-btn",
         onClick: function(date, cnt) {
             $("#onClick-placeholder").html(
-                date.toDateString() + "</b> <br/>with <b>" +
-                (cnt === null ? "0" : cnt) + "</b> contributions"
+                "<p style='font-size: 1.2em'>"+date.toDateString() + "</b> <br/>with <b>" +
+                (cnt === null ? "0" : cnt) + "</b> contributions </p>"
             );
         }
     });
@@ -127,3 +116,5 @@ function drawCalendar(data) {
         }
     });
 }
+
+// 화면 동작 시 그래프 범위 바뀌게 구현 하기..

@@ -4,4 +4,5 @@ window.onload = function () {
     calendarLoad()
     repositoriesLoad()
     skillsLoad()
+    blogUpdate()
 }
