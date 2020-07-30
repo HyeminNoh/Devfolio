@@ -4,5 +4,7 @@ window.onload = function () {
     calendarLoad()
     repositoriesLoad()
     skillsLoad()
-    blogUpdate()
+    if(document.getElementById('blog-div')){
+        blogLoad()
+    }
 }

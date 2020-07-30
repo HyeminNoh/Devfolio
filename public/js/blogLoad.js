@@ -5,6 +5,11 @@ function blogLoad() {
         method: "GET",
         dataType: "json"
     }).done(function (result) {
+        const timeDiff = new Date()-new Date(result[0].updated_dt)
+        const dayDiff = Math.floor(timeDiff/1000/60/60/24);
+        if(dayDiff>=1){
+            blogUpdate()
+        }
         $('div#blog-div').empty();
         // blog post card view 그리기
         drawBlogCards(result)
@@ -40,10 +45,11 @@ function drawBlogCards(data) {
             col.className = "col-12 col-sm-12 col-md-12"
             col.style.padding = "1em"
 
-            const card = makeCard(node)
+            const card = makeBlogCard(node)
             col.append(card)
             row.append(col)
         })
+
     } else {
         const failTxt = document.createElement("div")
         failTxt.className="col text-center"
@@ -55,64 +61,58 @@ function drawBlogCards(data) {
     blogDiv.append(row);
 }
 
-function makeCard(node) {
+function makeBlogCard(node) {
     const card = document.createElement('div')
     card.className = "card"
 
     const cardBody = document.createElement('div')
     cardBody.className = "card-body"
 
-    const title = document.createElement('div')
-    const description = document.createElement('div')
-    const stat = document.createElement('div')
-    stat.className="row"
-    const leftRow = document.createElement('div')
-    leftRow.className="row"
-    const leftCol = document.createElement('div')
-    leftCol.className="col"
-    const rightCol = document.createElement('div')
-    rightCol.className="col"
-    rightCol.style.textAlign="right"
-    const stargazer = document.createElement('col')
-    stargazer.style.marginLeft="1em"
-    const language = document.createElement('col')
-    language.style.marginLeft="0.3em"
-    const fork = document.createElement('col')
-    fork.style.marginLeft="0.3em"
+    const titleRow = document.createElement('div')
+    titleRow.className = 'row'
+    const titleLeftCol = document.createElement('div')
+    titleLeftCol.className = 'col-auto'
+    titleLeftCol.innerHTML = "<a href=" + node.link + "><h5>" + node.title + "</h5></a>"
+    const titleRightCol = document.createElement('div')
+    titleRightCol.className = 'col'
+    titleRightCol.style.textAlign='right'
+    titleRightCol.innerHTML = "<p style='color: gray'>"+node.date+"</p>"
 
-    title.innerHTML="<a href=" + node.url + "><h5>" + node.name + "</h5></a><hr>"
-    description.innerHTML = "<p>"+node.description+"</p>"
-    if(node.totalCount!==0){
-        stargazer.innerHTML="<p style='color:#808080;'><i class=\"fas fa-star\" style=\"color: #808080\"></i>&nbsp"+node.totalCount+"</p>"
-    }
-    if(node.primaryLanguage) {
-        language.innerHTML = "<p style='color:#808080;'><i class=\"fas fa-circle\" style='color:"+node.primaryLanguage.color+"'></i>&nbsp" + node.primaryLanguage.name + "</p>"
-    }
-    if(node.forkCount!==0) {
-        fork.innerHTML = "<p style='color:#808080;'><i class=\"fas fa-code-branch\" style=\"color: #808080\"></i>&nbsp" + node.forkCount + "</p>"
-    }
+    const tagRow = document.createElement('div')
+    tagRow.className = 'row'
+    const tagCol = document.createElement('div')
+    tagCol.className = 'col'
 
-    rightCol.innerHTML = "<p>"+node.diskUsage+" KB</p>"
+    if(typeof node.category === 'string'){
+        const pillBadge = document.createElement('span')
+        pillBadge.className = "badge badge-pill badge-secondary"
+        pillBadge.style.padding = '0.5em'
+        pillBadge.style.margin = '0.2em'
+        pillBadge.innerText = node.category
+        tagCol.append(pillBadge)
+    }
+    if(typeof node.category === 'object'){
+        for(let i=0; i<node.category.length; i++){
+            const pillBadge = document.createElement('span')
+            pillBadge.className = "badge badge-pill badge-secondary"
+            pillBadge.style.padding = '0.5em'
+            pillBadge.style.margin = '0.2em'
+            pillBadge.innerText = node.category[i]
+            tagCol.append(pillBadge)
+        }
+    }
 
     const stretchedLink = document.createElement('a')
     stretchedLink.className='stretched-link'
-    stretchedLink.setAttribute('data-toggle', 'modal')
-    stretchedLink.setAttribute('data-target', '#repoModal')
-    stretchedLink.onclick = function(){
-        makeModal(node)
-    }
+    stretchedLink.href = node.link;
 
-    leftRow.append(stargazer)
-    leftRow.append(language)
-    leftRow.append(fork)
-    leftCol.append(leftRow)
-    // 카드 바디 안에 내용 채우기
-    stat.append(leftCol)
-    stat.append(rightCol)
-    cardBody.append(title)
-    cardBody.append(description)
-    cardBody.append(stat)
+    titleRow.append(titleLeftCol)
+    titleRow.append(titleRightCol)
+    tagRow.append(tagCol)
+    cardBody.append(titleRow)
+    cardBody.append(tagRow)
     cardBody.append(stretchedLink)
+
     card.append(cardBody)
     return card
 }
