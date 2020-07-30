@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\Factories\ReportFactoryMethod;
 use App\Report;
+use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
@@ -65,6 +66,11 @@ class ReportRepository implements ReportRepositoryInterface
 
     // 데이터 신규 등록
     private function store($userIdx, $type){
+        $user = User::find($userIdx);
+        if($type=='blog' && empty($user->blog_url)){
+            return false;
+        }
+
         // instance 생성
         $report = $this->reportFactory->makeReport($userIdx, $type);
         $response = $report->getData();
