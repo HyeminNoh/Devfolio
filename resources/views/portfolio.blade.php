@@ -143,6 +143,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col" style="text-align: right; margin-top: 1em">
+                                                    <a class="btn btn-outline-secondary" href="{{ $user->blog_url }}" role="button">Read More Posts</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
