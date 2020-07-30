@@ -46,7 +46,7 @@ function drawRepositCards(data) {
             col.className = "col-12 col-sm-12 col-md-12"
             col.style.padding = "1em"
 
-            const card = makeCard(node)
+            const card = makeRepositCard(node)
             col.append(card)
             row.append(col)
         })
@@ -61,7 +61,7 @@ function drawRepositCards(data) {
     repositoriesDiv.append(row);
 }
 
-function makeCard(node) {
+function makeRepositCard(node) {
     const card = document.createElement('div')
     card.className = "card"
 
@@ -106,7 +106,7 @@ function makeCard(node) {
     stretchedLink.setAttribute('data-toggle', 'modal')
     stretchedLink.setAttribute('data-target', '#repoModal')
     stretchedLink.onclick = function(){
-        makeModal(node)
+        makeRepositModal(node)
     }
 
     leftRow.append(stargazer)
@@ -124,7 +124,7 @@ function makeCard(node) {
     return card
 }
 
-function makeModal(node) {
+function makeRepositModal(node) {
     // draw modal
     const title = document.getElementById('repoModalTitle')
     title.innerText = node.name

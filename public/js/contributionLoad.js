@@ -80,7 +80,6 @@ function drawCalendar(data) {
     const startDate = new Date(new Date(lastUnixTime*1000).getFullYear(), new Date(lastUnixTime*1000).getMonth()-10)
     const colors = contributions.colors
 
-    console.log(["#efefef"].concat(colors))
     const cal = new CalHeatMap();
     cal.init({
         start: startDate,
@@ -90,12 +89,8 @@ function drawCalendar(data) {
         domain: "month",
         subDomain: "day",
         range: 11,
-        legend: [1, 3, 5, 10],
-        legendColors: {
-            min: colors[0],
-            max: colors[colors.length-1],
-            empty: '#efefef'
-        },
+        legend: [1, 3, 5, 7, 10],
+        legendColors: ['#efefef', colors[colors.length-2]],
         legendHorizontalPosition: "right",
         nextSelector: "#next-btn",
         previousSelector: "#prev-btn",
