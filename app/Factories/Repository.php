@@ -9,10 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class Repository extends AbstractReport
 {
-    private $resultArray = array();
     private $token;
     private $userId;
 
+    /**
+     * Repository constructor.
+     * @param $userIdx
+     */
     public function __construct($userIdx)
     {
         $user = User::find($userIdx);
@@ -21,11 +24,22 @@ class Repository extends AbstractReport
         $this->setData($userIdx);
     }
 
+    /**
+     * Return repository instance value
+     *
+     * @return false|mixed|string
+     */
     public function getData()
     {
         return json_encode($this->resultArray);
     }
 
+    /**
+     * Fill repository instance value
+     *
+     * @param $userIdx
+     * @return mixed|void
+     */
     public function setData($userIdx)
     {
         $query = 'query {
@@ -68,10 +82,17 @@ class Repository extends AbstractReport
                           }
                         }
                       }';
-        $apiResponse = $this->callApi($this->token, $query, 'Repository');
+        $apiResponse = $this->callGithubApi($this->token, $query, 'Repository');
         $this->parseData($apiResponse);
     }
 
+    /**
+     * Get repository detail information from github rest api
+     *
+     * @param $repoNameWithOwner
+     * @param $token
+     * @return bool|\Psr\Http\Message\StreamInterface
+     */
     public function getAdditionalData($repoNameWithOwner, $token)
     {
         $client = new Client();
@@ -94,13 +115,18 @@ class Repository extends AbstractReport
 
     }
 
+    /**
+     * Parse repository information from github graphql response
+     *
+     * @param $apiResponse
+     * @return mixed|void
+     */
     public function parseData($apiResponse)
     {
         $repositories = $apiResponse->data->user->pinnedItems->edges;
         foreach ($repositories as $repo) {
             $repoData = $repo->node;
             $contributor = $this->getAdditionalData($repoData->nameWithOwner, $this->token);
-            // Log::info($contributor);
             $repoArray = array(
                 [
                     'name' => $repoData->name,

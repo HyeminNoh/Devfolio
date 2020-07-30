@@ -10,13 +10,37 @@ use Illuminate\Support\Facades\Log;
 
 abstract class AbstractReport
 {
+    /**
+     * Report's contents
+     *
+     * @var array
+     */
+    public $resultArray = array();
+
+    /**
+     * @return mixed
+     */
     abstract public function getData();
 
+    /**
+     * @param $userIdx
+     * @return mixed
+     */
     abstract public function setData($userIdx);
 
+    /**
+     * @param $apiResponse
+     * @return mixed
+     */
     abstract public function parseData($apiResponse);
 
-    public function callApi($token, $query, $type)
+    /**
+     * @param $token
+     * @param $query
+     * @param $type
+     * @return bool|mixed
+     */
+    public function callGithubApi($token, $query, $type)
     {
         $endpoint = "https://api.github.com/graphql";
         $client = new Client();

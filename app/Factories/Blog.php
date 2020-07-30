@@ -11,18 +11,31 @@ use Illuminate\Support\Facades\Log;
 
 class Blog extends AbstractReport
 {
-    private $resultArray = array();
-
+    /**
+     * Blog constructor.
+     * @param $userIdx
+     */
     public function __construct($userIdx)
     {
         $this->setData($userIdx);
     }
 
+    /**
+     * Return blog instance value
+     *
+     * @return false|mixed|string
+     */
     public function getData()
     {
         return json_encode($this->resultArray);
     }
 
+    /**
+     * Fill blog instance value
+     *
+     * @param $userIdx
+     * @return bool|mixed
+     */
     public function setData($userIdx)
     {
         $user = User::find($userIdx);
@@ -54,6 +67,12 @@ class Blog extends AbstractReport
         return true;
     }
 
+    /**
+     * Parse rss feed data
+     *
+     * @param $data
+     * @return mixed|void
+     */
     public function parseData($data)
     {
         $posts = json_encode($data[0]->channel);

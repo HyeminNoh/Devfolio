@@ -3,21 +3,35 @@
 namespace App\Factories;
 
 use App\User;
+use Illuminate\Support\Facades\Log;
 
 class Skill extends AbstractReport
 {
-    private $resultArray = array();
-
+    /**
+     * Skill constructor.
+     * @param $userIdx
+     */
     public function __construct($userIdx)
     {
         $this->setData($userIdx);
     }
 
+    /**
+     * Return skill instance value
+     *
+     * @return false|mixed|string
+     */
     public function getData()
     {
         return json_encode($this->resultArray);
     }
 
+    /**
+     * Fill skill instance value
+     *
+     * @param $userIdx
+     * @return mixed|void
+     */
     public function setData($userIdx)
     {
         $user = User::find($userIdx);
@@ -43,10 +57,16 @@ class Skill extends AbstractReport
                         }
                     }
                 }';
-        $apiResponse = $this->callApi($user->access_token, $query, 'Skill');
+        $apiResponse = $this->callGithubApi($user->access_token, $query, 'Skill');
         $this->parseData($apiResponse);
     }
 
+    /**
+     * Parse data from github api response
+     *
+     * @param $apiResponse
+     * @return bool|mixed
+     */
     public function parseData($apiResponse)
     {
         $inputData = $apiResponse->data->repositoryOwner->repositories->edges;
@@ -78,5 +98,6 @@ class Skill extends AbstractReport
         foreach ($noDuplication as $result) {
             array_push($this->resultArray, $result);
         }
+        return true;
     }
 }

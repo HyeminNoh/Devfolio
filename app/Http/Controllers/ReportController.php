@@ -6,15 +6,22 @@ use App\Repositories\ReportRepository;
 
 class ReportController extends Controller
 {
+    /**
+     * @var ReportRepository
+     */
     protected $reportRepo;
 
+    /**
+     * ReportController constructor.
+     * @param ReportRepository $reportRepo
+     */
     public function __construct(ReportRepository $reportRepo)
     {
         $this->reportRepo = $reportRepo;
     }
 
     /**
-     * Redirect the user to the Social Login Provider's authentication page.
+     * Renew user's report data
      *
      * @param $userIdx
      * @param string $type
@@ -26,7 +33,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Redirect the user to the Social Login Provider's authentication page.
+     * Returing user's report data
      *
      * @param $userIdx
      * @param string $type

@@ -25,7 +25,7 @@ class SocialController extends Controller
      *
      * @param Request $request
      * @param string $provider
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function execute(Request $request, $provider)
     {

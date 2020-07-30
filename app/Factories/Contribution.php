@@ -4,6 +4,7 @@ namespace App\Factories;
 
 use App\User;
 use DateTime;
+use Exception;
 
 class Contribution extends AbstractReport
 {
@@ -11,11 +12,21 @@ class Contribution extends AbstractReport
     private $totalContributions;
     private $dailyData;
 
+    /**
+     * Contribution constructor.
+     * @param $userIdx
+     * @throws Exception
+     */
     public function __construct($userIdx)
     {
         $this->setData($userIdx);
     }
 
+    /**
+     * Return contribution instance value
+     *
+     * @return false|mixed|string
+     */
     public function getData()
     {
         return json_encode([
@@ -25,6 +36,13 @@ class Contribution extends AbstractReport
         ]);
     }
 
+    /**
+     * Fill contribution instance value
+     *
+     * @param $userIdx
+     * @return mixed|void
+     * @throws Exception
+     */
     public function setData($userIdx)
     {
         $user = User::find($userIdx);
@@ -47,10 +65,17 @@ class Contribution extends AbstractReport
                         }
                       }
                 }';
-        $apiResponse = $this->callApi($user->access_token, $query, 'Contribution');
+        $apiResponse = $this->callGithubApi($user->access_token, $query, 'Contribution');
         $this->parseData($apiResponse);
     }
 
+    /**
+     * parse contribution data from github graphql response
+     *
+     * @param $apiResponse
+     * @return mixed|void
+     * @throws Exception
+     */
     public function parseData($apiResponse)
     {
         $inputData = $apiResponse->data->user->contributionsCollection->contributionCalendar;

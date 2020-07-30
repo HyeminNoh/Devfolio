@@ -11,15 +11,27 @@ use Illuminate\Support\Facades\Log;
 
 class ReportRepository implements ReportRepositoryInterface
 {
+    /**
+     * @var ReportFactoryMethod
+     */
     protected $reportFactory;
 
+    /**
+     * ReportRepository constructor.
+     */
     public function __construct()
     {
         // factory 생성
         $this->reportFactory = new ReportFactoryMethod;
     }
 
-    // 요청 타입에 맞는 데이터 조회
+    /**
+     * Obtain the report information from report data table.
+     *
+     * @param $userIdx
+     * @param $type
+     * @return bool
+     */
     public function get($userIdx, $type)
     {
         // 사용자 아이디 기반 조회
@@ -44,7 +56,13 @@ class ReportRepository implements ReportRepositoryInterface
         }
     }
 
-    // 데이터 수정
+    /**
+     * Edit report data in DB
+     *
+     * @param $userIdx
+     * @param $type
+     * @return bool
+     */
     public function update($userIdx, $type)
     {// instance 생성
         $report = $this->reportFactory->makeReport($userIdx, $type);
@@ -67,7 +85,13 @@ class ReportRepository implements ReportRepositoryInterface
         }
     }
 
-    // 데이터 신규 등록
+    /**
+     * Store new report data in DB
+     *
+     * @param $userIdx
+     * @param $type
+     * @return bool
+     */
     private function store($userIdx, $type)
     {
         // blog_url이 없는 사용자는 blog 데이터를 등록할 필요가 없음

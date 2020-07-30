@@ -9,6 +9,12 @@ use ReflectionException;
 
 class ReportFactoryMethod extends AbstractFactoryMethod
 {
+
+    /**
+     * @param $userIdx
+     * @param $type
+     * @return bool|mixed|object
+     */
     function makeReport($userIdx, $type)
     {
         // Reflection 활용 클래스 생성 - 생성할 객체가 뚜렷해 활용 가능
@@ -21,9 +27,11 @@ class ReportFactoryMethod extends AbstractFactoryMethod
                 return $refClass->newInstance($userIdx);
             } catch (ReflectionException $e) {
                 Log::info('Creating ' . $className . ' instance is fail');
+                return false;
             }
         } else {
             Log::info($className . ' Class is not existing');
+            return false;
         }
     }
 }
