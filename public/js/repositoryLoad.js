@@ -102,6 +102,7 @@ function makeCard(node) {
 
     const stretchedLink = document.createElement('a')
     stretchedLink.className='stretched-link'
+    stretchedLink.style.cursor = "pointer"
     stretchedLink.setAttribute('data-toggle', 'modal')
     stretchedLink.setAttribute('data-target', '#repoModal')
     stretchedLink.onclick = function(){
