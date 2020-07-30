@@ -17,10 +17,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'github_id', 'access_token', 'avatar', 'github_url', 'blog_url',
+        'name',
+        'email',
+        'github_id',
+        'access_token',
+        'avatar',
+        'github_url',
+        'blog_url',
     ];
 
-    public function report(){
+    public function report()
+    {
         return $this->hasMany(Report::class);
     }
 }

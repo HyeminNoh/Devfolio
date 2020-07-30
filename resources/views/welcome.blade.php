@@ -10,11 +10,13 @@
                 I use php language and Laravel framework.</p>
             @guest
                 <div class="float-right">
-                    <a class="btn btn-lg btn-dark"  href="{{ route('social.login', ['github']) }}"><i class="fab fa-github"></i> &nbsp; Sign in with Github</a>
+                    <a class="btn btn-lg btn-dark" href="{{ route('social.login', ['github']) }}"><i
+                            class="fab fa-github"></i> &nbsp; Sign in with Github</a>
                 </div>
             @else
                 <div class="float-right">
-                    <a class="btn btn-lg btn-dark"  href="{{ 'portfolio/'.auth()->user()->idx }}">📋 Go to My Portfolio</a>
+                    <a class="btn btn-lg btn-dark" href="{{ 'portfolio/'.auth()->user()->idx }}">📋 Go to My
+                        Portfolio</a>
                 </div>
             @endguest
         </div>

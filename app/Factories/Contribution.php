@@ -59,7 +59,7 @@ class Contribution extends AbstractReport
 
         $this->dailyData = array();
         foreach ($inputData->weeks as $week) {
-            foreach($week->contributionDays as $day){
+            foreach ($week->contributionDays as $day) {
                 $timeToSeconds = new Datetime($day->date);
                 $this->dailyData[$timeToSeconds->format('U')] = $day->contributionCount;
             }

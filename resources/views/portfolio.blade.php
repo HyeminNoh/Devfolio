@@ -64,7 +64,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-4" id="onClick-placeholder" style="text-align: right">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-4" id="onClick-placeholder"
+                                         style="text-align: right">
                                         <p style="font-weight: bold; font-size: 1.2em"> Click your calendar ! </p>
                                     </div>
                                 </div>
@@ -111,8 +112,9 @@
                                                 <div id="chart-desc-div" class="row" style="margin-top: 1em">
                                                     <div class="col">
                                                         <div class="d-flex justify-content-center">
-                                                            <div class="spinner-border spinner-border m-5 text-secondary"
-                                                                 role="status">
+                                                            <div
+                                                                class="spinner-border spinner-border m-5 text-secondary"
+                                                                role="status">
                                                                 <span class="sr-only">Loading...</span>
                                                             </div>
                                                         </div>
@@ -145,7 +147,8 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col" style="text-align: right; margin-top: 1em">
-                                                    <a class="btn btn-outline-secondary" href="{{ $user->blog_url }}" role="button">Read More Posts</a>
+                                                    <a class="btn btn-outline-secondary" href="{{ $user->blog_url }}"
+                                                       role="button">Read More Posts</a>
                                                 </div>
                                             </div>
                                         </div>

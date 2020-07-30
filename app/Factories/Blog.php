@@ -28,7 +28,7 @@ class Blog extends AbstractReport
         $user = User::find($userIdx);
         $blog = $user->blog_url;
 
-        if(empty($blog)){
+        if (empty($blog)) {
             return false;
         }
         $blog = parse_url($blog, PHP_URL_HOST);
@@ -59,7 +59,7 @@ class Blog extends AbstractReport
         $posts = json_encode($data[0]->channel);
         // Log::info(json_encode(json_decode($posts)->item));
         $posts = json_decode($posts)->item;
-        for($i=0; $i<3; $i++){
+        for ($i = 0; $i < 3; $i++) {
             $postArray = json_decode(json_encode($posts[$i]));
             array_push($this->resultArray, [
                 'title' => $postArray->title,

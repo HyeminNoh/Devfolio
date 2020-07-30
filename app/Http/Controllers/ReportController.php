@@ -8,7 +8,8 @@ class ReportController extends Controller
 {
     protected $reportRepo;
 
-    public function __construct(ReportRepository $reportRepo){
+    public function __construct(ReportRepository $reportRepo)
+    {
         $this->reportRepo = $reportRepo;
     }
 
@@ -19,7 +20,8 @@ class ReportController extends Controller
      * @param string $type
      * @return bool
      */
-    public function update($userIdx, $type){
+    public function update($userIdx, $type)
+    {
         return $this->reportRepo->update($userIdx, $type);
     }
 
@@ -30,7 +32,8 @@ class ReportController extends Controller
      * @param string $type
      * @return string
      */
-    public function show($userIdx, $type){
+    public function show($userIdx, $type)
+    {
         return $this->reportRepo->get($userIdx, $type);
     }
 }

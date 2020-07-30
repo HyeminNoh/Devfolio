@@ -20,7 +20,8 @@ class ReportRepository implements ReportRepositoryInterface
     }
 
     // 요청 타입에 맞는 데이터 조회
-    public function get($userIdx, $type){
+    public function get($userIdx, $type)
+    {
         // 사용자 아이디 기반 조회
         $checkData = Report::where(['user_idx' => $userIdx, 'type' => $type])->first();
 
@@ -34,20 +35,22 @@ class ReportRepository implements ReportRepositoryInterface
             $userData = Report::select(['data', 'updated_dt'])
                 ->where(['user_idx' => $userIdx, 'type' => $type])
                 ->get()->toJson();
-            Log::info('Select '.$type.' Data Success');
+            Log::info('Select ' . $type . ' Data Success');
             return $userData;
         } catch (QueryException $e) {
-            Log::info('Select '.$type.' Data Fail');
+            Log::info('Select ' . $type . ' Data Fail');
             Log::debug("Select Error Message: \n" . $e);
             return false;
         }
     }
 
     // 데이터 수정
-    public function update($userIdx, $type){// instance 생성
+    public function update($userIdx, $type)
+    {// instance 생성
         $report = $this->reportFactory->makeReport($userIdx, $type);
         $response = $report->getData($type);
 
+        // 대체할 데이터가 비어 있을 시
         if (empty($response)) {
             Log::info('Data for updating is empty');
             return false;
@@ -55,19 +58,21 @@ class ReportRepository implements ReportRepositoryInterface
         try {
             Report::where(['user_idx' => $userIdx, 'type' => $type])
                 ->update(['data' => $response, 'updated_dt' => now()]);
-            Log::info('Update '.$type.' Data Success');
+            Log::info('Update ' . $type . ' Data Success');
             return true;
         } catch (QueryException $e) {
-            Log::info('Update '.$type.' Data Fail');
+            Log::info('Update ' . $type . ' Data Fail');
             Log::debug("Update Error Message: \n" . $e);
             return false;
         }
     }
 
     // 데이터 신규 등록
-    private function store($userIdx, $type){
+    private function store($userIdx, $type)
+    {
+        // blog_url이 없는 사용자는 blog 데이터를 등록할 필요가 없음
         $user = User::find($userIdx);
-        if($type=='blog' && empty($user->blog_url)){
+        if ($type == 'blog' && empty($user->blog_url)) {
             return false;
         }
 
@@ -89,10 +94,10 @@ class ReportRepository implements ReportRepositoryInterface
                 'created_dt' => $nowDt,
                 'updated_dt' => $nowDt
             ]);
-            Log::info('Insert '.$type.' Data Success');
+            Log::info('Insert ' . $type . ' Data Success');
             return true;
         } catch (QueryException $e) {
-            Log::info('Insert '.$type.' Data Fail');
+            Log::info('Insert ' . $type . ' Data Fail');
             Log::debug("Insert Error Message: \n" . $e);
             return false;
         }

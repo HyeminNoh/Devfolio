@@ -12,6 +12,7 @@ class Repository extends AbstractReport
     private $resultArray = array();
     private $token;
     private $userId;
+
     public function __construct($userIdx)
     {
         $user = User::find($userIdx);
@@ -28,7 +29,7 @@ class Repository extends AbstractReport
     public function setData($userIdx)
     {
         $query = 'query {
-                    user(login: "'.$this->userId.'") {
+                    user(login: "' . $this->userId . '") {
                         email
                         pinnedItems(first: 6, types: [REPOSITORY]) {
                             totalCount
@@ -71,25 +72,28 @@ class Repository extends AbstractReport
         $this->parseData($apiResponse);
     }
 
-    public function getAdditionalData($repoNameWithOwner, $token){
+    public function getAdditionalData($repoNameWithOwner, $token)
+    {
         $client = new Client();
         try {
-            $response = $client->request('GET', 'https://api.github.com/repos/'.$repoNameWithOwner . '/contributors', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $token,
-                    'Accept' => 'application/json'
-                ]
-            ])->getBody();
-            Log::info("Calling ".$repoNameWithOwner." data is Success");
+            $response = $client->request('GET', 'https://api.github.com/repos/' . $repoNameWithOwner . '/contributors',
+                [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $token,
+                        'Accept' => 'application/json'
+                    ]
+                ])->getBody();
+            Log::info("Calling " . $repoNameWithOwner . " data is Success");
             return $response;
         } catch (GuzzleException $e) {
             // api 오류 처리
-            Log::info("Calling".$repoNameWithOwner."data is Fail");
+            Log::info("Calling" . $repoNameWithOwner . "data is Fail");
             Log::debug("Calling API Error Message: \n" . $e);
             return false;
         }
 
     }
+
     public function parseData($apiResponse)
     {
         $repositories = $apiResponse->data->user->pinnedItems->edges;
@@ -97,18 +101,20 @@ class Repository extends AbstractReport
             $repoData = $repo->node;
             $contributor = $this->getAdditionalData($repoData->nameWithOwner, $this->token);
             // Log::info($contributor);
-            $repoArray = array([
-                'name' => $repoData->name,
-                'description' => $repoData->description,
-                'forkCount' => $repoData->forkCount,
-                'totalCount' => $repoData->stargazers->totalCount,
-                'url' => $repoData->url,
-                'homepageUrl' => $repoData->homepageUrl,
-                'diskUsage' => $repoData->diskUsage,
-                'primaryLanguage' => $repoData->primaryLanguage,
-                'languages' => $repoData->languages,
-                'contributor' => json_decode($contributor)
-            ]);
+            $repoArray = array(
+                [
+                    'name' => $repoData->name,
+                    'description' => $repoData->description,
+                    'forkCount' => $repoData->forkCount,
+                    'totalCount' => $repoData->stargazers->totalCount,
+                    'url' => $repoData->url,
+                    'homepageUrl' => $repoData->homepageUrl,
+                    'diskUsage' => $repoData->diskUsage,
+                    'primaryLanguage' => $repoData->primaryLanguage,
+                    'languages' => $repoData->languages,
+                    'contributor' => json_decode($contributor)
+                ]
+            );
             array_push($this->resultArray, $repoArray[0]);
         }
     }

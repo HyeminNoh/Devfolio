@@ -1,7 +1,6 @@
 <?php
 
 use App\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,14 +18,14 @@ Route::get('/', function () {
     return view('welcome');
 })->name('root');
 
-Route::get('portfolio/{userIdx}', function ($userIdx){
+Route::get('portfolio/{userIdx}', function ($userIdx) {
     $user = User::find($userIdx);
     return view('portfolio', ['user' => $user]);
 });
 
 /* social login */
-Route::get('social/{provider}',[
-    'as'=>'social.login',
+Route::get('social/{provider}', [
+    'as' => 'social.login',
     'uses' => 'SocialController@execute',
 ]);
 
@@ -36,7 +35,7 @@ Route::get('auth/logout', [
 ]);
 
 Route::get('report/{userIdx}/{type}/update', [
-    'as'=>'skill.update',
+    'as' => 'skill.update',
     'uses' => 'ReportController@update'
 ]);
 
