@@ -6,6 +6,7 @@ namespace App\Factories;
 
 use App\User;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
 class Blog extends AbstractReport
@@ -26,11 +27,10 @@ class Blog extends AbstractReport
     {
         $user = User::find($userIdx);
         $blog = $user->blog_url;
-        if (empty($blog)) {
-            // 빈 배열 그대로 둠
+
+        if(empty($blog)){
             return false;
         }
-
         $blog = parse_url($blog, PHP_URL_HOST);
         $splitUrl = explode('.', $blog);
         $blogType = $splitUrl[count($splitUrl) - 2];
@@ -39,32 +39,33 @@ class Blog extends AbstractReport
         switch ($blogType) {
             case 'tistory':
                 $client = new Client();
-                $response = $client->request('GET', 'http://' . $blog . '/rss')
-                    ->getBody()->getContents();
-                $response = simplexml_load_string($response, 'SimpleXMLElement');
-                $this->parseData($response);
+                try {
+                    $response = $client->request('GET', 'http://' . $blog . '/rss')
+                        ->getBody()->getContents();
+                    $response = simplexml_load_string($response, 'SimpleXMLElement');
+                    $this->parseData($response);
+                } catch (GuzzleException $e) {
+                    Log::info('Loading rss blog data is fail');
+                }
                 break;
             default:
                 Log::info('Undefined Blog type');
-                return false;
         }
-
+        return true;
     }
 
     public function parseData($data)
     {
-        $category = array();
-        $data = json_encode($data);
-        $posts = $data->channel->item;
-        for ($i = 0; $i < 3; $i++) {
-            foreach ($posts[$i] as $detail) {
-                array_push($category, $detail);
-            }
+        $posts = json_encode($data[0]->channel);
+        // Log::info(json_encode(json_decode($posts)->item));
+        $posts = json_decode($posts)->item;
+        for($i=0; $i<3; $i++){
+            $postArray = json_decode(json_encode($posts[$i]));
             array_push($this->resultArray, [
-                'title' => $posts[$i]->title,
-                'link' => $posts[$i]->link,
-                'category' => $category,
-                'date' => $posts[$i]->pubDate
+                'title' => $postArray->title,
+                'link' => $postArray->link,
+                'category' => $postArray->category,
+                'date' => strftime("%Y-%m-%d", strtotime($postArray->pubDate))
             ]);
         }
     }
