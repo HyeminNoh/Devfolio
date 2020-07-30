@@ -246,6 +246,15 @@ function makeModal(node) {
         contriValues.push(contributor[i].contributions)
     }
 
+    // 랜덤 색상 생성
+    randomColor = []
+    for(let i=0; i<contriValues.length; i++){
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        randomColor.push("rgb(" + r + "," + g + "," + b + ")");
+    }
+
     // 언어 사용 통계 그래프
     $('div#contriChartDiv').empty();
     const contriChartDiv = document.getElementById('contriChartDiv')
@@ -257,7 +266,8 @@ function makeModal(node) {
         type: 'doughnut',
         data: {
             datasets: [{
-                data: contriValues
+                data: contriValues,
+                backgroundColor: randomColor,
             }],
 
             // These labels appear in the legend and in the tooltips when hovering different arcs
