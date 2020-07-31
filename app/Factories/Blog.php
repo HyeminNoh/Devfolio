@@ -39,27 +39,24 @@ class Blog extends AbstractReport
     public function setData($userIdx)
     {
         $user = User::find($userIdx);
-        $blog = $user->blog_url;
-
-        if (empty($blog)) {
+        $originBlog = $user->blog_url;
+        if (empty($originBlog)) {
             return false;
         }
-        $blog = parse_url($blog, PHP_URL_HOST);
-        $splitUrl = explode('.', $blog);
+        $blogHost = parse_url($originBlog, PHP_URL_HOST);
+        $splitUrl = explode('.', $blogHost);
         $blogType = $splitUrl[count($splitUrl) - 2];
 
         // rss 활용해서 다른 github api 콜과 다름
         switch ($blogType) {
             case 'tistory':
-                $client = new Client();
-                try {
-                    $response = $client->request('GET', 'http://' . $blog . '/rss')
-                        ->getBody()->getContents();
-                    $response = simplexml_load_string($response, 'SimpleXMLElement');
-                    $this->parseData($response);
-                } catch (GuzzleException $e) {
-                    Log::info('Loading rss blog data is fail');
-                }
+                $requestUrl = 'http://'.$blogHost.'/rss';
+                $this->getRssFeed($requestUrl);
+                break;
+            case 'naver':
+                $blogPath = parse_url($originBlog, PHP_URL_PATH);
+                $requestUrl = 'http://rss.'.$blogHost.$blogPath.'.xml';
+                $this->getRssFeed($requestUrl);
                 break;
             default:
                 Log::info('Undefined Blog type');
@@ -76,7 +73,7 @@ class Blog extends AbstractReport
     public function parseData($data)
     {
         $posts = json_encode($data[0]->channel);
-        // Log::info(json_encode(json_decode($posts)->item));
+        //Log::info(json_encode(json_decode($posts)->item));
         $posts = json_decode($posts)->item;
         $postSize = count($posts);
 
@@ -92,6 +89,24 @@ class Blog extends AbstractReport
                 'category' => $postArray->category,
                 'date' => strftime("%Y-%m-%d", strtotime($postArray->pubDate))
             ]);
+        }
+    }
+
+    public function getRssFeed($requestUrl){
+        $client = new Client();
+        try {
+            $response = $client->request('GET', $requestUrl, [
+                'header' => [
+                    'Accept' => 'application/xml'
+                ]
+            ])
+                ->getBody()->getContents();
+            $response = simplexml_load_string($response, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $this->parseData($response);
+            return true;
+        } catch (GuzzleException $e) {
+            Log::info('Loading rss blog data is fail');
+            return false;
         }
     }
 }
