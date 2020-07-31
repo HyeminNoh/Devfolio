@@ -1,7 +1,7 @@
 let userIdx;
 // 데이터 로드 실패 텍스트
 const dataLoadFailTxt = document.createElement("h4")
-dataLoadFailTxt.innerText = "데이터가 없습니다."
+dataLoadFailTxt.innerText = "데이터 로드 실패"
 
 window.onload = function () {
     this.userIdx = window.location.pathname.split("/").pop();

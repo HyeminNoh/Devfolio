@@ -18,6 +18,7 @@ function blogLoad() {
     }).fail(function () {
         $('div#blog-div').empty();
         const blogDiv = document.getElementById('blog-div')
+        blogDiv.style.textAlign='center'
         blogDiv.append(dataLoadFailTxt)
     })
 }
@@ -50,7 +51,6 @@ function drawBlogCards(data) {
             col.append(card)
             row.append(col)
         })
-
     } else {
         const blogEmptyTxt = document.createElement("div")
         blogEmptyTxt.className = "col text-center"
