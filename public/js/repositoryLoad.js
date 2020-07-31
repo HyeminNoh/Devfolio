@@ -175,7 +175,7 @@ function makeRepoModal(node) {
 
     // 언어 사용 설명
     const langDesc = document.getElementById("modalLangDesc");
-    $('div#modalLangDesc').empty();
+    $('div#modalLangDesc').empty()
     if (languages.length) {
         for (let i = 0; i < languages.length; i++) {
             const langText = document.createElement("p")
@@ -196,45 +196,9 @@ function makeRepoModal(node) {
     }
 
     // 언어 사용 통계 그래프
-    $('div#modalLangChart').empty();
     const langChartDiv = document.getElementById('modalLangChart')
-    const langChart = document.createElement('canvas')
-    langChart.width = 100
-    langChart.height = 100
-
-    const ctx = langChart.getContext('2d');
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: langValues,
-                backgroundColor: langColors,
-            }],
-            labels: langLabels
-        },
-        options: {
-            tooltips: {
-                callbacks: {
-                    label: function (tooltipItem, data) {
-                        //get the concerned dataset
-                        const dataset = data.datasets[tooltipItem.datasetIndex];
-                        //calculate the total of this data set
-                        const total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
-                            return previousValue + currentValue;
-                        });
-                        //get the current items value
-                        const currentValue = dataset.data[tooltipItem.index];
-                        //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
-                        const percentage = Math.floor(((currentValue / total) * 100) + 0.5);
-                        return langLabels[tooltipItem.index] + " " + percentage + "%";
-                    }
-                }
-            },
-            legend: {
-                display: false
-            }
-        }
-    });
+    $('div#modalLangChart').empty()
+    const langChart = drawDoughnut(langValues, langColors, langLabels, false, 'repo')
     langChartDiv.append(langChart);
 
     // 기여자 기여도에 따른 내림차순 정렬
@@ -255,7 +219,7 @@ function makeRepoModal(node) {
         contributorProfile.style.marginTop = "1em"
         const profileImg = document.createElement('div')
         profileImg.className = 'col'
-        profileImg.innerHTML = "<img src='" + contributor[i].avatar_url + "' class=\"img-thumbnail\"/>"
+        profileImg.innerHTML = "<img src='" + contributor[i].avatar_url + "' class=\"img-thumbnail\" alt='avatar'/>"
 
         const profileDesc = document.createElement('div')
         profileDesc.className = 'col'
@@ -279,45 +243,8 @@ function makeRepoModal(node) {
     }
 
     // 언어 사용 통계 그래프
-    $('div#contriChartDiv').empty();
     const contriChartDiv = document.getElementById('contriChartDiv')
-    const contriChart = document.createElement('canvas')
-    contriChart.width = 100
-    contriChart.height = 100
-    const ctx2 = contriChart.getContext('2d');
-    new Chart(ctx2, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: contriValues,
-                backgroundColor: randomColor,
-            }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: contriNames
-        },
-        options: {
-            tooltips: {
-                callbacks: {
-                    label: function (tooltipItem, data) {
-                        //get the concerned dataset
-                        const dataset = data.datasets[tooltipItem.datasetIndex];
-                        //calculate the total of this data set
-                        const total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
-                            return previousValue + currentValue;
-                        });
-                        //get the current items value
-                        const currentValue = dataset.data[tooltipItem.index];
-                        //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
-                        const percentage = Math.floor(((currentValue / total) * 100) + 0.5);
-                        return contriNames[tooltipItem.index] + " " + percentage + "%";
-                    }
-                }
-            },
-            legend: {
-                display: false
-            }
-        }
-    });
+    $('div#contriChartDiv').empty()
+    const contriChart = drawDoughnut(contriValues, randomColor, contriNames, false, 'repo')
     contriChartDiv.append(contriChart);
 }

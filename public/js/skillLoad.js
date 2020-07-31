@@ -63,48 +63,7 @@ function drawSkillChart(data) {
 
     // 그래프
     const chartDiv = document.getElementById('pie-chart-div')
-    const chart = document.createElement("canvas")
-    const chartContext = chart.getContext('2d')
-    new Chart(chartContext, {
-        // The type of chart we want to create
-        type: 'doughnut',
-
-        // The data for our dataset
-        data: {
-            datasets: [{
-                data: values,
-                backgroundColor: colors,
-                borderColor: colors,
-            }],
-            labels: labels
-        },
-
-        // Configuration options go here
-        options: {
-            tooltips: {
-                callbacks: {
-                    label: function (tooltipItem, data) {
-                        //get the concerned dataset
-                        var dataset = data.datasets[tooltipItem.datasetIndex];
-                        //calculate the total of this data set
-                        var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
-                            return previousValue + currentValue;
-                        });
-                        //get the current items value
-                        var currentValue = dataset.data[tooltipItem.index];
-                        //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
-                        var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
-
-                        return labels[tooltipItem.index] + " " + percentage + "%";
-                    }
-                }
-            },
-            legend: {
-                display: true,
-                position: 'right',
-            },
-        }
-    })
+    const chart = drawDoughnut(values, colors, labels, true, 'skill')
     chartDiv.append(chart)
 
     // 텍스트 설명
