@@ -25,6 +25,6 @@ class SessionsController extends Controller
         auth()->logout();
 
         Log::info('Sign out: ' . $username);
-        return redirect('/');
+        return redirect()->back();
     }
 }
