@@ -78,7 +78,13 @@ class Blog extends AbstractReport
         $posts = json_encode($data[0]->channel);
         // Log::info(json_encode(json_decode($posts)->item));
         $posts = json_decode($posts)->item;
-        for ($i = 0; $i < 3; $i++) {
+        $postSize = count($posts);
+
+        for ($i = 0; $i < $postSize; $i++) {
+            // 블로그 포스팅 개수는 3개까지
+            if($i>=3){
+                break;
+            }
             $postArray = json_decode(json_encode($posts[$i]));
             array_push($this->resultArray, [
                 'title' => $postArray->title,
