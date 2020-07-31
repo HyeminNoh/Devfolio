@@ -15,13 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $userList = User::inRandomOrder()->get();
+    return view('welcome', ['userList'=>$userList]);
 })->name('root');
 
 Route::get('portfolio/{userIdx}', function ($userIdx) {
     $user = User::find($userIdx);
     return view('portfolio', ['user' => $user]);
-});
+})->name('portfolio');
 
 /* social login */
 Route::get('social/{provider}', [
