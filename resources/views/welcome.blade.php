@@ -20,5 +20,27 @@
                 </div>
             @endguest
         </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <h3>🔎 Explore</h3>
+            </div>
+            <div class="col" style="text-align: right">
+                <p style="color: gray">👀 다른 사용자들의 포트폴리오를 둘러보세요!</p>
+            </div>
+        </div>
+        <div class="row">
+            @foreach($userList as $user)
+                <div class="col-lg-3 col-md-4 col" style="margin-top: 1em">
+                    <div class="card">
+                        <div class="card-body">
+                            <img src="{{ $user->avatar }}" width="100%;"/>
+                            <h5 style="margin-top: 1em">{{ $user->name }}</h5>
+                            <a class="stretched-link" href="{{ route('portfolio', ['userIdx' => $user->idx]) }}"></a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 @endsection
