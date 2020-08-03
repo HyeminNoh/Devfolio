@@ -38,20 +38,22 @@ return [
         // 다중 채널을 생성할 수 있는 채널
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'syslog'],
+            'channels' => ['info', 'error'],
             'ignore_exceptions' => false,
         ],
 
-        'single' => [
+        'info' => [
             'driver' => 'single',
             'tap' => [App\Logging\CustomizeFormatter::class],
             'path' => storage_path('logs/info/'.date('Y-m-d').'.log'),
             'level' => 'info',
         ],
 
-        'syslog' => [
-            'driver' => 'syslog',
-            'level' => 'debug',
+        'error' => [
+            'driver' => 'errorlog',
+            'tap' => [App\Logging\CustomizeFormatter::class],
+            'path' => storage_path('logs/error/'.date('Y-m-d').'.log'),
+            'level' => 'error',
         ],
     ],
 
