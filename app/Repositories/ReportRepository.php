@@ -15,6 +15,8 @@ class ReportRepository
      * @var ReportFactoryMethod
      */
     protected $reportFactory;
+    protected $report;
+    protected $user;
 
     /**
      * ReportRepository constructor.
@@ -23,6 +25,8 @@ class ReportRepository
     {
         // factory 생성
         $this->reportFactory = new ReportFactoryMethod;
+        $this->report = new Report;
+        $this->user = new User;
     }
 
     /**
@@ -35,7 +39,7 @@ class ReportRepository
     public function get($userIdx, $type)
     {
         // 사용자 아이디 기반 조회
-        $checkData = Report::where(['user_idx' => $userIdx, 'type' => $type])->first();
+        $checkData = $this->report->where(['user_idx' => $userIdx, 'type' => $type])->first();
 
         // 데이터가 아예 없을 경우 생성
         if (empty($checkData)) {
@@ -44,7 +48,7 @@ class ReportRepository
 
         // 조회
         try {
-            $userData = Report::select(['data', 'updated_dt'])
+            $userData = $this->report->select(['data', 'updated_dt'])
                 ->where(['user_idx' => $userIdx, 'type' => $type])
                 ->get()->toJson();
             Log::info('Select ' . $type . ' Data Success');
@@ -74,7 +78,7 @@ class ReportRepository
             return false;
         }
         try {
-            Report::where(['user_idx' => $userIdx, 'type' => $type])
+            $this->report->where(['user_idx' => $userIdx, 'type' => $type])
                 ->update(['data' => $response, 'updated_dt' => now()]);
             Log::info('Update ' . $type . ' Data Success');
             return true;
@@ -95,7 +99,7 @@ class ReportRepository
     private function store($userIdx, $type)
     {
         // blog_url이 없는 사용자는 blog 데이터를 등록할 필요가 없음
-        $user = User::find($userIdx);
+        $user = $this->user->find($userIdx);
         if ($type == 'blog' && empty($user->blog_url)) {
             return false;
         }
@@ -111,7 +115,7 @@ class ReportRepository
         }
 
         try {
-            Report::create([
+            $this->report->create([
                 'user_idx' => $userIdx,
                 'type' => $type,
                 'data' => $response,
