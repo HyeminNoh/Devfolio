@@ -9,11 +9,8 @@ use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
-class ReportRepository
+class ReportRepository implements ReportRepositoryInterface
 {
-    /**
-     * @var ReportFactoryMethod
-     */
     protected $reportFactory;
     protected $report;
     protected $user;
@@ -55,7 +52,7 @@ class ReportRepository
             return $userData;
         } catch (QueryException $e) {
             Log::info('Select ' . $type . ' Data Fail');
-            Log::debug("Select Error Message: \n" . $e);
+            Log::error("Select ".$type." Data Error Message: \n" . $e);
             return false;
         }
     }
@@ -84,7 +81,7 @@ class ReportRepository
             return true;
         } catch (QueryException $e) {
             Log::info('Update ' . $type . ' Data Fail');
-            Log::debug("Update Error Message: \n" . $e);
+            Log::error("Update ".$type." Data Error Message: \n" . $e);
             return false;
         }
     }
@@ -126,7 +123,7 @@ class ReportRepository
             return true;
         } catch (QueryException $e) {
             Log::info('Insert ' . $type . ' Data Fail');
-            Log::debug("Insert Error Message: \n" . $e);
+            Log::error("Insert ".$type."Data Error Message: \n" . $e);
             return false;
         }
     }

@@ -13,7 +13,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SocialController extends Controller
 {
-    private $user;
+    protected $user;
 
     /**
      * SocialController constructor.
@@ -100,6 +100,7 @@ class SocialController extends Controller
             } catch (QueryException $exception) {
                 Alert::error('Sign Up Fail');
                 Log::info('Sign Up Fail');
+                Log::error("Sign Up Fail Error Message: \n".$exception);
                 return redirect('/');
             }
             Alert::success('Sign up Success');

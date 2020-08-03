@@ -12,9 +12,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class ReportController extends Controller
 {
-    /**
-     * @var ReportRepository
-     */
     protected $reportRepo;
     protected $userRepo;
 
