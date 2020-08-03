@@ -45,7 +45,7 @@ abstract class AbstractReport
      * @param $type
      * @return bool|mixed
      */
-    public function callGithubApi($token, $query, $type)
+    public function callGraphql($token, $query, $type)
     {
         $endpoint = "https://api.github.com/graphql";
         $client = new Client();
@@ -69,8 +69,8 @@ abstract class AbstractReport
 
         } catch (GuzzleException $e) {
             // api 오류 처리
-            Log::info("Calling API for" . $type . "Data Fail");
-            Log::debug("Calling API Error Message: \n" . $e);
+            Log::info("Calling GraphQL for" . $type . "Data Fail");
+            Log::error("Calling GraphQL Error Message: \n" . $e);
             return false;
         }
     }

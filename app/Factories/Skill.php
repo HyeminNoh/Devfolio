@@ -56,7 +56,7 @@ class Skill extends AbstractReport
                         }
                     }
                 }';
-        $apiResponse = $this->callGithubApi($this->githubToken, $query, 'Skill');
+        $apiResponse = $this->callGraphql($this->githubToken, $query, 'Skill');
         $this->parseData($apiResponse);
     }
 

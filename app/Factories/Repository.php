@@ -78,7 +78,7 @@ class Repository extends AbstractReport
                           }
                         }
                       }';
-        $apiResponse = $this->callGithubApi($this->githubToken, $query, 'Repository');
+        $apiResponse = $this->callGraphql($this->githubToken, $query, 'Repository');
         $this->parseData($apiResponse);
     }
 
@@ -105,7 +105,7 @@ class Repository extends AbstractReport
         } catch (GuzzleException $e) {
             // api 오류 처리
             Log::info("Calling" . $repoNameWithOwner . "data is Fail");
-            Log::debug("Calling API Error Message: \n" . $e);
+            Log::error("Calling Rest API Error Message: \n" . $e);
             return false;
         }
 

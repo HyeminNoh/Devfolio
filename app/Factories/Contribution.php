@@ -64,7 +64,7 @@ class Contribution extends AbstractReport
                         }
                       }
                 }';
-        $apiResponse = $this->callGithubApi($this->githubToken, $query, 'Contribution');
+        $apiResponse = $this->callGraphql($this->githubToken, $query, 'Contribution');
         $this->parseData($apiResponse);
     }
 

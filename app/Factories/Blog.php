@@ -103,6 +103,7 @@ class Blog extends AbstractReport
             return true;
         } catch (GuzzleException $e) {
             Log::info('Loading rss blog data is fail');
+            Log::error("Loading rss blog data error message: \n".$e);
             return false;
         }
     }
