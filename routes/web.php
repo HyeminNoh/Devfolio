@@ -15,13 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/* main page */
 Route::get('/', function (UserRepository $userRepo) {
     return view('welcome', ['userList'=>$userRepo->all()]);
 })->name('root');
-
-Route::get('portfolio/{githubId}', function (UserRepository $userRepo, $githubId) {
-    return view('portfolio', ['user' => $userRepo->getGithub($githubId)]);
-})->name('portfolio');
 
 /* social login */
 Route::get('social/{provider}', [
@@ -29,14 +26,23 @@ Route::get('social/{provider}', [
     'uses' => 'SocialController@execute',
 ]);
 
+/* session destory */
 Route::get('auth/logout', [
     'as' => 'sessions.destroy',
     'uses' => 'SessionsController@destroy',
 ]);
 
+/* show report page */
+Route::get('report/{githubId}', [
+    'as' => 'report.show',
+    'uses' => 'ReportController@show'
+]);
+
+/* update report data */
 Route::get('report/{userIdx}/{type}/update', [
     'as' => 'skill.update',
     'uses' => 'ReportController@update'
 ]);
 
-Route::get('report/{userIdx}/{type}/show', 'ReportController@show');
+/* get report json data */
+Route::get('report/{userIdx}/{type}/get', 'ReportController@get');

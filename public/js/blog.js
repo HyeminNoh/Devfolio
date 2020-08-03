@@ -3,7 +3,7 @@
 // 데이터 로드
 function blogLoad(userIdx) {
     $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/blog/show`,
+        url: `http://127.0.0.1:8000/report/${userIdx}/blog/get`,
         method: 'GET',
         dataType: 'json'
     }).done((result) => {
