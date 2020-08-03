@@ -15,7 +15,7 @@
                 </div>
             @else
                 <div class="float-right">
-                    <a class="btn btn-lg btn-dark" href="{{ route('portfolio', ['githubId' => auth()->user()->github_id]) }}">📋 Go to My
+                    <a class="btn btn-lg btn-dark" href="{{ route('report.show', ['githubId' => auth()->user()->github_id]) }}">📋 Go to My
                         Portfolio</a>
                 </div>
             @endguest
@@ -29,18 +29,20 @@
                 <p style="color: gray">👀 다른 사용자들의 포트폴리오를 둘러보세요!</p>
             </div>
         </div>
-        <div class="row">
-            @foreach($userList as $user)
-                <div class="col-lg-3 col-md-4 col" style="margin-top: 1em">
-                    <div class="card">
-                        <div class="card-body">
-                            <img src="{{ $user->avatar }}" width="100%;"/>
-                            <h5 style="margin-top: 1em">{{ $user->name }}</h5>
-                            <a class="stretched-link" href="{{ route('portfolio', ['githubId' => $user->github_id]) }}"></a>
+        @if ($userList)
+            <div class="row">
+                @foreach($userList as $user)
+                    <div class="col-lg-3 col-md-4 col" style="margin-top: 1em">
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="{{ $user->avatar }}" width="100%;"/>
+                                <h5 style="margin-top: 1em">{{ $user->name }}</h5>
+                                <a class="stretched-link" href="{{ route('report.show', ['githubId' => $user->github_id]) }}"></a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 @endsection
