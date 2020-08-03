@@ -11,6 +11,7 @@
         "php": "^7.2.5",
         "ext-curl": "*",
         "ext-json": "*",
+        "ext-simplexml": "*",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^7.0",
@@ -19,7 +20,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
         "monolog/monolog": "^2.1",
-      "ext-simplexml": "*"
+        "realrashid/sweet-alert": "^3.1"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
