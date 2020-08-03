@@ -2,7 +2,7 @@
 
 namespace App\Factories;
 
-use App\User;
+use App\Repositories\UserRepository;
 use DateTime;
 use Exception;
 
@@ -19,7 +19,8 @@ class Contribution extends AbstractReport
      */
     public function __construct($userIdx)
     {
-        $this->setData($userIdx);
+        AbstractReport::__construct(new UserRepository(), $userIdx);
+        $this->setData();
     }
 
     /**
@@ -39,15 +40,13 @@ class Contribution extends AbstractReport
     /**
      * Fill contribution instance value
      *
-     * @param $userIdx
      * @return mixed|void
      * @throws Exception
      */
-    public function setData($userIdx)
+    public function setData()
     {
-        $user = User::find($userIdx);
         $query = 'query {
-                    user(login: "' . $user->github_id . '") {
+                    user(login: "' . $this->githubId . '") {
                         contributionsCollection {
                             contributionCalendar {
                                 colors
@@ -65,7 +64,7 @@ class Contribution extends AbstractReport
                         }
                       }
                 }';
-        $apiResponse = $this->callGithubApi($user->access_token, $query, 'Contribution');
+        $apiResponse = $this->callGithubApi($this->githubToken, $query, 'Contribution');
         $this->parseData($apiResponse);
     }
 

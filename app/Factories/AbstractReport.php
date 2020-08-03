@@ -3,19 +3,25 @@
 
 namespace App\Factories;
 
-
+use App\Repositories\UserRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
 abstract class AbstractReport
 {
-    /**
-     * Report's contents
-     *
-     * @var array
-     */
-    public $resultArray = array();
+    protected $resultArray = array();
+    protected $githubId;
+    protected $githubToken;
+    protected $blogUrl;
+
+    public function __construct(UserRepository $userRepo, $userIdx)
+    {
+        $user = $userRepo->get($userIdx);
+        $this->githubId = $user->github_id;
+        $this->githubToken = $user->access_token;
+        $this->blogUrl = $user->blog_url;
+    }
 
     /**
      * @return mixed
@@ -23,10 +29,9 @@ abstract class AbstractReport
     abstract public function getData();
 
     /**
-     * @param $userIdx
      * @return mixed
      */
-    abstract public function setData($userIdx);
+    abstract public function setData();
 
     /**
      * @param $apiResponse

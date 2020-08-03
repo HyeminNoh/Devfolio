@@ -2,15 +2,14 @@
 
 namespace App\Factories;
 
-use App\User;
+use App\Repositories\UserRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
+use Psr\Http\Message\StreamInterface;
 
 class Repository extends AbstractReport
 {
-    private $token;
-    private $userId;
 
     /**
      * Repository constructor.
@@ -18,10 +17,8 @@ class Repository extends AbstractReport
      */
     public function __construct($userIdx)
     {
-        $user = User::find($userIdx);
-        $this->userId = $user->github_id;
-        $this->token = $user->access_token;
-        $this->setData($userIdx);
+        AbstractReport::__construct(new UserRepository(), $userIdx);
+        $this->setData();
     }
 
     /**
@@ -37,13 +34,12 @@ class Repository extends AbstractReport
     /**
      * Fill repository instance value
      *
-     * @param $userIdx
      * @return mixed|void
      */
-    public function setData($userIdx)
+    public function setData()
     {
         $query = 'query {
-                    user(login: "' . $this->userId . '") {
+                    user(login: "' . $this->githubId . '") {
                         email
                         pinnedItems(first: 6, types: [REPOSITORY]) {
                             totalCount
@@ -82,7 +78,7 @@ class Repository extends AbstractReport
                           }
                         }
                       }';
-        $apiResponse = $this->callGithubApi($this->token, $query, 'Repository');
+        $apiResponse = $this->callGithubApi($this->githubToken, $query, 'Repository');
         $this->parseData($apiResponse);
     }
 
@@ -91,7 +87,7 @@ class Repository extends AbstractReport
      *
      * @param $repoNameWithOwner
      * @param $token
-     * @return bool|\Psr\Http\Message\StreamInterface
+     * @return bool|StreamInterface
      */
     public function getAdditionalData($repoNameWithOwner, $token)
     {
@@ -126,7 +122,7 @@ class Repository extends AbstractReport
         $repositories = $apiResponse->data->user->pinnedItems->edges;
         foreach ($repositories as $repo) {
             $repoData = $repo->node;
-            $contributor = $this->getAdditionalData($repoData->nameWithOwner, $this->token);
+            $contributor = $this->getAdditionalData($repoData->nameWithOwner, $this->githubToken);
             $repoArray = array(
                 [
                     'name' => $repoData->name,

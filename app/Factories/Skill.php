@@ -2,7 +2,7 @@
 
 namespace App\Factories;
 
-use App\User;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Log;
 
 class Skill extends AbstractReport
@@ -13,7 +13,8 @@ class Skill extends AbstractReport
      */
     public function __construct($userIdx)
     {
-        $this->setData($userIdx);
+        AbstractReport::__construct(new UserRepository(), $userIdx);
+        $this->setData();
     }
 
     /**
@@ -29,14 +30,12 @@ class Skill extends AbstractReport
     /**
      * Fill skill instance value
      *
-     * @param $userIdx
      * @return mixed|void
      */
-    public function setData($userIdx)
+    public function setData()
     {
-        $user = User::find($userIdx);
         $query = 'query {
-                    repositoryOwner (login: "' . $user->github_id . '") {
+                    repositoryOwner (login: "' . $this->githubId . '") {
                         repositories(first:100) {
                             totalCount
                             edges{
@@ -57,7 +56,7 @@ class Skill extends AbstractReport
                         }
                     }
                 }';
-        $apiResponse = $this->callGithubApi($user->access_token, $query, 'Skill');
+        $apiResponse = $this->callGithubApi($this->githubToken, $query, 'Skill');
         $this->parseData($apiResponse);
     }
 

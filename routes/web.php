@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,14 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $userList = User::inRandomOrder()->get();
-    return view('welcome', ['userList'=>$userList]);
+Route::get('/', function (UserRepository $userRepo) {
+    return view('welcome', ['userList'=>$userRepo->all()]);
 })->name('root');
 
-Route::get('portfolio/{userIdx}', function ($userIdx) {
-    $user = User::find($userIdx);
-    return view('portfolio', ['user' => $user]);
+Route::get('portfolio/{userIdx}', function (UserRepository $userRepo, $userIdx) {
+    return view('portfolio', ['user' => $userRepo->get($userIdx)]);
 })->name('portfolio');
 
 /* social login */

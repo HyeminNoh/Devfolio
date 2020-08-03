@@ -3,8 +3,7 @@
 
 namespace App\Factories;
 
-
-use App\User;
+use App\Repositories\UserRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +16,8 @@ class Blog extends AbstractReport
      */
     public function __construct($userIdx)
     {
-        $this->setData($userIdx);
+        AbstractReport::__construct(new UserRepository(), $userIdx);
+        $this->setData();
     }
 
     /**
@@ -33,17 +33,14 @@ class Blog extends AbstractReport
     /**
      * Fill blog instance value
      *
-     * @param $userIdx
      * @return bool|mixed
      */
-    public function setData($userIdx)
+    public function setData()
     {
-        $user = User::find($userIdx);
-        $originBlog = $user->blog_url;
-        if (empty($originBlog)) {
+        if (empty($this->blogUrl)) {
             return false;
         }
-        $blogHost = parse_url($originBlog, PHP_URL_HOST);
+        $blogHost = parse_url($this->blogUrl, PHP_URL_HOST);
         $splitUrl = explode('.', $blogHost);
         $blogType = $splitUrl[count($splitUrl) - 2];
 
@@ -54,7 +51,7 @@ class Blog extends AbstractReport
                 $this->getRssFeed($requestUrl);
                 break;
             case 'naver':
-                $blogPath = parse_url($originBlog, PHP_URL_PATH);
+                $blogPath = parse_url($this->blogUrl, PHP_URL_PATH);
                 $requestUrl = 'http://rss.'.$blogHost.$blogPath.'.xml';
                 $this->getRssFeed($requestUrl);
                 break;

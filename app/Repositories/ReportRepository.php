@@ -9,7 +9,7 @@ use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
-class ReportRepository implements ReportRepositoryInterface
+class ReportRepository
 {
     /**
      * @var ReportFactoryMethod
