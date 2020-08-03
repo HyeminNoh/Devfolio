@@ -13,6 +13,12 @@ interface UserRepositoryInterface
     public function get($idx);
 
     /**
+     * @param $githubId
+     * @return mixed
+     */
+    public function getGithub($githubId);
+
+    /**
      * @return mixed
      */
     public function all();

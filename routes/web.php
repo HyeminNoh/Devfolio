@@ -19,8 +19,8 @@ Route::get('/', function (UserRepository $userRepo) {
     return view('welcome', ['userList'=>$userRepo->all()]);
 })->name('root');
 
-Route::get('portfolio/{userIdx}', function (UserRepository $userRepo, $userIdx) {
-    return view('portfolio', ['user' => $userRepo->get($userIdx)]);
+Route::get('portfolio/{githubId}', function (UserRepository $userRepo, $githubId) {
+    return view('portfolio', ['user' => $userRepo->getGithub($githubId)]);
 })->name('portfolio');
 
 /* social login */

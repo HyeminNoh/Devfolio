@@ -17,6 +17,8 @@ class UserRepository
     }
 
     /**
+     * Obtain the user information by data table idx.
+     *
      * @param $idx
      * @return User|User[]|Collection|Model|null
      */
@@ -25,6 +27,18 @@ class UserRepository
     }
 
     /**
+     * Obtain the user information by User's gitub id.
+     *
+     * @param $githubId
+     * @return mixed
+     */
+    public function getGithub($githubId){
+        return $this->user->where(['github_id' => $githubId])->first();
+    }
+
+    /**
+     * Obtain all user's information in random order
+     *
      * @return User[]|Collection
      */
     public function all(){
