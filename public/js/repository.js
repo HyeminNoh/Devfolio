@@ -93,12 +93,12 @@ function makeRepoCard(node) {
 
     // 주요 언어
     if (node.primaryLanguage) {
-        language.innerHTML = `<p style='color:#808080;'><i class='fas fa-star' style='color: ${node.primaryLanguage.color}'></i>&nbsp${node.primaryLanguage.name}</p>`;
+        language.innerHTML = `<p style='color:#808080;'><i class='fas fa-circle' style='color: ${node.primaryLanguage.color}'></i>&nbsp${node.primaryLanguage.name}</p>`;
     }
 
     // fork 개수
     if (node.forkCount !== 0) {
-        fork.innerHTML = `<p style='color:#808080;'><i class='fas fa-star' style='color: #808080'></i>&nbsp${node.forkCount}</p>`;
+        fork.innerHTML = `<p style='color:#808080;'><i class='fas fa-code-branch' style='color: #808080'></i>&nbsp${node.forkCount}</p>`;
     }
 
     // 용량
