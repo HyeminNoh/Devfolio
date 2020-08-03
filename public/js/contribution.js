@@ -73,17 +73,17 @@ function drawCalendar(data) {
         }
     });
 
-    document.getElementById('prev-btn').onclick((e) => {
+    document.getElementById('prev-btn').onclick = (e) => {
         e.preventDefault();
         if (!cal.previous()) {
             return false;
         }
-    });
+    }
 
-    document.getElementById('next-btn').onclick((e) => {
+    document.getElementById('next-btn').onclick = (e) => {
         e.preventDefault();
         if (!cal.next()) {
             return false;
         }
-    });
+    }
 }
