@@ -3,20 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SocialController extends Controller
 {
+    private $user;
+
     /**
      * SocialController constructor.
      */
     public function __construct()
     {
+        $this->user = new User;
         $this->middleware('guest');
     }
 
@@ -57,32 +61,32 @@ class SocialController extends Controller
      */
     protected function handleProviderCallback($provider)
     {
-        try {
-            // oauth 정보 로드
-            $socialData = Socialite::driver($provider)->user();
+        // oauth 정보 로드
+        $socialData = Socialite::driver($provider)->user();
 
-            // 필수 정보 조회 성공 여부 확인
-            if (empty($socialData->token)) {
-                Log::info('Loading' . $provider . ' access token is fail');
-                return redirect('/');
-            }
+        // 필수 정보 조회 성공 여부 확인
+        if (empty($socialData->token)) {
+            Log::info('Loading' . $provider . ' access token is fail');
+            return redirect('/');
+        }
 
-            if (empty($socialData->getEmail())) {
-                Log::info('Loading' . $provider . ' user email is fail');
-                return redirect('/');
-            }
+        if (empty($socialData->getEmail())) {
+            Log::info('Loading' . $provider . ' user email is fail');
+            return redirect('/');
+        }
 
-            // 중복 사용 되는 값 변수 처리
-            $userMail = $socialData->getEmail();
-            $userNickname = $socialData->getNickname();
-            $nowDt = now();
+        // 중복 사용 되는 값 변수 처리
+        $userMail = $socialData->getEmail();
+        $userNickname = $socialData->getNickname();
+        $nowDt = now();
 
-            // 사용자 등록 여부 확인
-            $user = (User::whereEmail($userMail)->first());
+        // 사용자 등록 여부 확인
+        $user = ($this->user->whereEmail($userMail)->first());
 
-            // 새로운 사용자 추가
-            if (!$user) {
-                $user = User::create([
+        // 새로운 사용자 추가
+        if (!$user) {
+            try {
+                $user = $this->user->create([
                     'name' => $socialData->getName() ?: $userNickname,
                     'email' => $userMail,
                     'github_id' => $userNickname,
@@ -93,15 +97,16 @@ class SocialController extends Controller
                     'updated_dt' => $nowDt,
                     'created_dt' => $nowDt
                 ]);
-                Log::info('Sign Up: ' . $socialData->getEmail());
+            } catch (QueryException $exception) {
+                Alert::error('Sign Up Fail');
+                Log::info('Sign Up Fail');
+                return redirect('/');
             }
-            auth()->login($user);
-            Log::info('Sign in: ' . auth()->user()->name);
-            return redirect(route('portfolio/' . auth()->user()->idx));
-        } catch (Exception $e) {
-            Log::info('Github Login Fail');
-            Log::debug('Github Login Error Message');
-            return redirect('/');
+            Alert::success('Sign up Success');
+            Log::info('Sign Up: ' . $socialData->getEmail());
         }
+        auth()->login($user);
+        Log::info('Sign in: ' . auth()->user()->name);
+        return redirect()->back();
     }
 }
