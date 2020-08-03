@@ -54,7 +54,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ 'portfolio/'.auth()->user()->idx }}">My Portfolio</a>
+                                <a class="dropdown-item" href="{{ 'portfolio/'.auth()->user()->github_id }}">My Portfolio</a>
                                 <a class="dropdown-item" href="{{ route('sessions.destroy') }}">Sign out</a>
                             </div>
                         </li>

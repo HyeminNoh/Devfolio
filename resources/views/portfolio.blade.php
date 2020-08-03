@@ -20,8 +20,7 @@
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="col" style="text-align: right">
-                                        <a style="color: gray" href={{ $user->github_url }}>Github <i
-                                                class="fab fa-github"></i></a>
+                                        <a style="color: gray" href={{ $user->github_url }}>Github <i class="fab fa-github"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -39,7 +38,7 @@
                                         <h4>📅 Contribution Calendar</h4>
                                     </div>
                                     <div class="col" style="margin-top: 0.2em; text-align: right">
-                                        <button onclick="calendarUpdate()" class="btn btn-light" type="button">
+                                        <button onclick="calendarUpdate({{$user->idx}})" class="btn btn-light" type="button">
                                             <i class="fas fa-sync"></i>
                                         </button>
                                     </div>
@@ -56,11 +55,19 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 col-sm-12 col-md-12 col-lg-8">
-                                        <div class="row" id="cal-div">
-                                            <div class="d-flex justify-content-center">
-                                                <div class="spinner-border text-secondary" role="status">
-                                                    <span class="sr-only">Loading...</span>
+                                        <div class="row">
+                                            <div class="col-1">
+                                                <button id="prev-btn" class="btn btn-light" style="height: 80%"><</button>
+                                            </div>
+                                            <div class="col" id="cal-heatmap" style="overflow: hidden" >
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="spinner-border text-secondary" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-1">
+                                                <button id="next-btn" class="btn btn-light" style="height: 80%">></button>
                                             </div>
                                         </div>
                                     </div>
@@ -84,7 +91,7 @@
                                                 <h4>📊 Skills</h4>
                                             </div>
                                             <div class="col" style="margin-top: 0.2em; text-align: right">
-                                                <button onclick="skillsUpdate()" class="btn btn-light" type="button">
+                                                <button onclick="skillsUpdate({{$user->idx}})" class="btn btn-light" type="button">
                                                     <i class="fas fa-sync"></i>
                                                 </button>
                                             </div>
@@ -138,10 +145,12 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <div id="blog-div">
-                                                <div class="d-flex justify-content-center">
-                                                    <div class="spinner-border text-secondary" role="status">
-                                                        <span class="sr-only">Loading...</span>
+                                            <div class="row" id="blog-div">
+                                                <div class="col">
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="spinner-border text-secondary" role="status">
+                                                            <span class="sr-only">Loading...</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -165,7 +174,7 @@
                                         <h4>📌 Pinned Repository</h4>
                                     </div>
                                     <div class="col" style="margin-top: 0.2em; text-align: right">
-                                        <button onclick="repositoriesUpdate()" class="btn btn-light" type="button"><i
+                                        <button onclick="repositoriesUpdate({{$user->idx}})" class="btn btn-light" type="button"><i
                                                 class="fas fa-sync"></i></button>
                                     </div>
                                 </div>
@@ -176,10 +185,12 @@
                                         <p id="repository-updated-text" style="color: gray">Last Updated: </p>
                                     </div>
                                 </div>
-                                <div id="repositories-div">
-                                    <div class="d-flex justify-content-center">
-                                        <div class="spinner-border text-secondary" role="status">
-                                            <span class="sr-only">Loading...</span>
+                                <div class="row" id="repositories-div">
+                                    <div class="col">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-border text-secondary" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -204,7 +215,7 @@
                             </div>
                         </div>
                         <div class="row" style="margin: 0.1em;">
-                            <div id="ModalPageUrl" class="col">
+                            <div id="modalPageUrl" class="col">
                             </div>
                         </div>
                         <div class="row bg-light" style="margin: 0.1em;">
@@ -253,11 +264,16 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/dataLoad.js') }}"></script>
-    <script src="{{ asset('js/contributionLoad.js') }}"></script>
-    <script src="{{ asset('js/repositoryLoad.js') }}"></script>
-    <script src="{{ asset('js/skillLoad.js') }}"></script>
-    <script src="{{ asset('js/blogLoad.js') }}"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            loadPortfolio({{ $user->idx }});
+        }
+    </script>
+    <script src="{{ asset('js/portfolio.js') }}"></script>
+    <script src="{{ asset('js/contribution.js') }}"></script>
+    <script src="{{ asset('js/repository.js') }}"></script>
+    <script src="{{ asset('js/skill.js') }}"></script>
+    <script src="{{ asset('js/blog.js') }}"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>

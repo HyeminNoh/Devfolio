@@ -15,7 +15,7 @@
                 </div>
             @else
                 <div class="float-right">
-                    <a class="btn btn-lg btn-dark" href="{{ 'portfolio/'.auth()->user()->idx }}">📋 Go to My
+                    <a class="btn btn-lg btn-dark" href="{{ route('portfolio', ['githubId' => auth()->user()->github_id]) }}">📋 Go to My
                         Portfolio</a>
                 </div>
             @endguest
@@ -36,7 +36,7 @@
                         <div class="card-body">
                             <img src="{{ $user->avatar }}" width="100%;"/>
                             <h5 style="margin-top: 1em">{{ $user->name }}</h5>
-                            <a class="stretched-link" href="{{ route('portfolio', ['userIdx' => $user->idx]) }}"></a>
+                            <a class="stretched-link" href="{{ route('portfolio', ['githubId' => $user->github_id]) }}"></a>
                         </div>
                     </div>
                 </div>
