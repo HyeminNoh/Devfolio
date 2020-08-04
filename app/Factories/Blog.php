@@ -69,9 +69,7 @@ class Blog extends AbstractReport
      */
     public function parseData($data)
     {
-        $posts = json_encode($data[0]->channel);
-        //Log::info(json_encode(json_decode($posts)->item));
-        $posts = json_decode($posts)->item;
+        $posts = $data[0]->channel->item;
         $postSize = count($posts);
 
         for ($i = 0; $i < $postSize; $i++) {

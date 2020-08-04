@@ -11,7 +11,7 @@ function blogLoad(userIdx) {
         const dayDiff = Math.floor(timeDiff / 1000 / 60 / 60 / 24);
         // 날짜가 하루 이상 차이날 때 피드 새로 조회
         if (dayDiff >= 1) {
-            blogUpdate();
+            blogUpdate(userIdx);
         }
         // blog post card view 그리기
         drawBlogCards(result);
