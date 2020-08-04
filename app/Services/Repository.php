@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Factories;
+namespace App\Services;
 
-use App\Repositories\UserRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
@@ -10,17 +9,6 @@ use Psr\Http\Message\StreamInterface;
 
 class Repository extends AbstractReport
 {
-
-    /**
-     * Repository constructor.
-     * @param $userIdx
-     */
-    public function __construct($userIdx)
-    {
-        AbstractReport::__construct(new UserRepository(), $userIdx);
-        $this->setData();
-    }
-
     /**
      * Return repository instance value
      *
@@ -104,7 +92,7 @@ class Repository extends AbstractReport
             return $response;
         } catch (GuzzleException $e) {
             // api 오류 처리
-            Log::info("Calling" . $repoNameWithOwner . "data is Fail");
+            Log::info("Calling" . $repoNameWithOwner . " data is Fail");
             Log::error("Calling Rest API Error Message: \n" . $e);
             return false;
         }

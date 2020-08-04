@@ -1,25 +1,14 @@
 <?php
 
 
-namespace App\Factories;
+namespace App\Services;
 
-use App\Repositories\UserRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
 class Blog extends AbstractReport
 {
-    /**
-     * Blog constructor.
-     * @param $userIdx
-     */
-    public function __construct($userIdx)
-    {
-        AbstractReport::__construct(new UserRepository(), $userIdx);
-        $this->setData();
-    }
-
     /**
      * Return blog instance value
      *

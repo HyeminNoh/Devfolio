@@ -108,6 +108,6 @@ class SocialController extends Controller
         }
         auth()->login($user);
         Log::info('Sign in: ' . auth()->user()->name);
-        return redirect()->back();
+        return redirect('/');
     }
 }

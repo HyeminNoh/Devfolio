@@ -1,15 +1,15 @@
 <?php
 
 
-namespace App\Factories;
+namespace App\Services;
 
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Log;
 use ReflectionClass;
 use ReflectionException;
 
-class ReportFactoryMethod extends AbstractFactoryMethod
+class ReportFactoryMethod
 {
-
     /**
      * @param $userIdx
      * @param $type
@@ -24,7 +24,9 @@ class ReportFactoryMethod extends AbstractFactoryMethod
             try {
                 Log::info($className . ' instance created');
                 $refClass = new ReflectionClass($classPath);
-                return $refClass->newInstance($userIdx);
+                $userRepo = new UserRepository();
+                $user = $userRepo->get($userIdx);
+                return $refClass->newInstance($user);
             } catch (ReflectionException $e) {
                 Log::info('Creating ' . $className . ' instance is fail');
                 return false;

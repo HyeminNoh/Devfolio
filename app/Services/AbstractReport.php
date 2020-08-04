@@ -1,9 +1,8 @@
 <?php
 
 
-namespace App\Factories;
+namespace App\Services;
 
-use App\Repositories\UserRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
@@ -15,12 +14,12 @@ abstract class AbstractReport
     protected $githubToken;
     protected $blogUrl;
 
-    public function __construct(UserRepository $userRepo, $userIdx)
+    public function __construct($user)
     {
-        $user = $userRepo->get($userIdx);
         $this->githubId = $user->github_id;
         $this->githubToken = $user->access_token;
         $this->blogUrl = $user->blog_url;
+        $this->setData();
     }
 
     /**

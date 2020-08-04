@@ -1,22 +1,11 @@
 <?php
 
-namespace App\Factories;
+namespace App\Services;
 
-use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Log;
 
 class Skill extends AbstractReport
 {
-    /**
-     * Skill constructor.
-     * @param $userIdx
-     */
-    public function __construct($userIdx)
-    {
-        AbstractReport::__construct(new UserRepository(), $userIdx);
-        $this->setData();
-    }
-
     /**
      * Return skill instance value
      *

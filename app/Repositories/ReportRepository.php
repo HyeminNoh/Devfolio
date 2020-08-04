@@ -3,7 +3,7 @@
 
 namespace App\Repositories;
 
-use App\Factories\ReportFactoryMethod;
+use App\Services\ReportFactoryMethod;
 use App\Report;
 use App\User;
 use Illuminate\Database\QueryException;
@@ -123,7 +123,7 @@ class ReportRepository implements ReportRepositoryInterface
             return true;
         } catch (QueryException $e) {
             Log::info('Insert ' . $type . ' Data Fail');
-            Log::error("Insert ".$type."Data Error Message: \n" . $e);
+            Log::error("Insert ".$type." Data Error Message: \n" . $e);
             return false;
         }
     }

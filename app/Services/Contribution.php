@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Factories;
+namespace App\Services;
 
-use App\Repositories\UserRepository;
 use DateTime;
 use Exception;
 
@@ -11,17 +10,6 @@ class Contribution extends AbstractReport
     private $colors;
     private $totalContributions;
     private $dailyData;
-
-    /**
-     * Contribution constructor.
-     * @param $userIdx
-     * @throws Exception
-     */
-    public function __construct($userIdx)
-    {
-        AbstractReport::__construct(new UserRepository(), $userIdx);
-        $this->setData();
-    }
 
     /**
      * Return contribution instance value

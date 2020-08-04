@@ -7,6 +7,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -50,6 +51,12 @@ class ReportController extends Controller
      */
     public function update($userIdx, $type)
     {
+        // 로그인 상태 체크 및 업데이트 요청 사용자가 현재 로그인한 사용자 인지 체크
+        if(!auth()->check() || auth()->user()->idx != $userIdx){
+            Log::info('Unauthorized user request data update');
+            return false;
+        }
+
         return $this->reportRepo->update($userIdx, $type);
     }
 
