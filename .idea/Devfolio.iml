@@ -119,5 +119,7 @@
     <orderEntry type="library" name="cal-heatmap" level="application" />
     <orderEntry type="library" name="d3.v3" level="application" />
     <orderEntry type="library" name="chart.js" level="application" />
+    <orderEntry type="library" name="moment.js" level="application" />
+    <orderEntry type="library" name="sweetalert" level="application" />
   </component>
 </module>
