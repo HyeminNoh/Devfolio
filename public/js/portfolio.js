@@ -1,11 +1,11 @@
-// 포트폴리오 페이지에 들어가는 요소들 로드
+// 포트폴리오 페이지에 들어가는 요소들 최초 로드
 function loadPortfolio(userIdx) {
-    calendarLoad(userIdx);
-    repositoriesLoad(userIdx);
-    skillsLoad(userIdx);
+    initCalendar(userIdx);
+    initRepo(userIdx);
+    initSkill(userIdx);
     // 블로그 포스트 정보가 들어갈 div 요소가 있는지 확인
     if (document.getElementById('blog-div')) {
-        blogLoad(userIdx);
+        initBlog(userIdx);
     }
 }
 
@@ -26,9 +26,9 @@ function dataNullDiv(content) {
 // 도넛형 차트 생성
 function drawDoughnut(values, colors, labels, legendState, type) {
     const chart = document.createElement('canvas');
-    if(type==='repo'){
-        chart.width=100;
-        chart.height=100;
+    if (type === 'repo') {
+        chart.width = 100;
+        chart.height = 100;
     }
     const chartContext = chart.getContext('2d');
     new Chart(chartContext, {
@@ -76,6 +76,42 @@ function drawDoughnut(values, colors, labels, legendState, type) {
 
 // 내부 요소 지우기
 function deleteAll(selectId) {
-    const selectedDiv= document.getElementById(selectId);
+    const selectedDiv = document.getElementById(selectId);
     selectedDiv.querySelectorAll('*').forEach(n => n.remove());
+}
+
+// 마지막 업데이트 상태 체크
+function updatedState(updatedTime) {
+    const timeDiff = new Date() - new Date(updatedTime);
+    const dayDiff = Math.floor(timeDiff / 1000 / 60 / 60 / 24);
+    // 날짜가 하루 이상 차이 안나면 업데이트 완료된 상황
+    return dayDiff < 1;
+}
+
+// 데이터 조회 요청 ajax
+function getData(type, userIdx) {
+    let data = []
+    $.ajax({
+        url: `http://127.0.0.1:8000/report/${userIdx}/${type}/get`,
+        method: 'GET',
+        dataType: 'json',
+        async: false,
+    }).done((result) => {
+        data = result
+    });
+    return data;
+}
+
+// 데이터 갱신 요청 ajax
+function updateData(type, userIdx) {
+    let state = false;
+    $.ajax({
+        url: `http://127.0.0.1:8000/report/${userIdx}/${type}/update`,
+        method: 'GET',
+        dataType: 'json',
+        async: false,
+    }).done(()=>{
+        state = true;
+    });
+    return state;
 }

@@ -1,30 +1,23 @@
 /* 대표 저장소 데이터 로드 & 카드 뷰 생성 */
 
 // 데이터 로드
-function repositoriesLoad(userIdx) {
-    $.ajax({
-        url: `http://127.0.0.1:8000/report/ ${userIdx} /repository/get`,
-        method: 'GET',
-        dataType: 'json'
-    }).done((result) => {
-        // calendar view 자리 다시 그리기
-        drawRepoCards(result);
-    }).fail(() => {
+function initRepo(userIdx) {
+    const result = getData('repository', userIdx);
+    if(!result){
         deleteAll('repositories-div');
         const repoDiv = document.getElementById('repositories-div');
         repoDiv.append(dataLoadFailTxt);
-    })
+    }
+    drawRepoCards(result);
 }
 
 // 데이터 갱신
-function repositoriesUpdate(userIdx) {
-    $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/repository/update`,
-        method: 'GET',
-        dataType: 'json'
-    }).always(() => {
-        repositoriesLoad(userIdx);
-    })
+function updateRepo(userIdx) {
+    const state = updateData('repository', userIdx);
+    if(!state){
+        return false;
+    }
+    initRepo(userIdx);
 }
 
 // 리포짓 정보 카드들을 담을 div 컴포넌트 구성

@@ -1,30 +1,24 @@
 /* Contribution 달력 차트 데이터 로드 & 컴포넌트 생성 */
 
 // 데이터 로드
-function calendarLoad(userIdx) {
-    $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/contribution/get`,
-        method: 'GET',
-        dataType: 'json',
-    }).done((result) => {
-        // calendar view 자리 다시 그리기
-        drawCalendar(result);
-    }).fail(() => {
+function initCalendar(userIdx) {
+    const result = getData('contribution', userIdx);
+    if(!result){
         deleteAll('cal-heatmap');
         const calendarDiv = document.getElementById('cal-heatmap');
         calendarDiv.append(dataLoadFailTxt);
-    });
+    }
+    // calendar view 자리 다시 그리기
+    drawCalendar(result);
 }
 
 // 데이터 갱신
-function calendarUpdate(userIdx) {
-    $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/contribution/update`,
-        method: 'GET',
-        dataType: 'json',
-    }).always(() => {
-        calendarLoad(userIdx);
-    });
+function updateCalendar(userIdx) {
+    const state = updateData('contribution', userIdx);
+    if(!state){
+        return false;
+    }
+    initCalendar(userIdx);
 }
 
 function drawCalendar(data) {

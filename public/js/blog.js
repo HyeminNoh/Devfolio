@@ -1,37 +1,28 @@
 /* 사용자 블로그 최신 피드 데이터 로드 & 컴포넌트 생성 */
 
 // 데이터 로드
-function blogLoad(userIdx) {
-    $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/blog/get`,
-        method: 'GET',
-        dataType: 'json'
-    }).done((result) => {
-        const timeDiff = new Date() - new Date(result[0].updated_dt);
-        const dayDiff = Math.floor(timeDiff / 1000 / 60 / 60 / 24);
-        // 날짜가 하루 이상 차이날 때 피드 새로 조회
-        if (dayDiff >= 1) {
-            blogUpdate(userIdx);
-        }
-        // blog post card view 그리기
-        drawBlogCards(result);
-    }).fail(() => {
+function initBlog(userIdx) {
+    const result = getData('blog', userIdx);
+    if(!result){
         deleteAll('blog-div');
         const blogDiv = document.getElementById('blog-div');
         blogDiv.style.textAlign='center';
         blogDiv.append(dataLoadFailTxt);
-    })
+    }
+    if(!updatedState(result[0].updated_dt)){
+        // 마지막 업데이트가 하루 이상 지났을 시 다시 갱신
+        updateBlog(userIdx);
+    }
+    drawBlogCards(result);
 }
 
 // 데이터 갱신
-function blogUpdate(userIdx) {
-    $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/blog/update`,
-        method: 'GET',
-        dataType: 'json'
-    }).always(() => {
-        blogLoad(userIdx);
-    })
+function updateBlog(userIdx) {
+    const state = updateData('blog', userIdx);
+    if(!state){
+        return false;
+    }
+    initBlog(userIdx);
 }
 
 // blog-div 내부 채우기

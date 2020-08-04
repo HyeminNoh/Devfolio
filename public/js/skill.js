@@ -1,32 +1,25 @@
 /* 사용자 기술 통계 데이터 로드 & 컴포넌트 생성 */
 
 // 데이터 로드
-function skillsLoad(userIdx) {
-    $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/skill/get`,
-        method: 'GET',
-        dataType: 'json'
-    }).done((result) => {
-        // chart view 자리 다시 그리기
-        drawSkillChart(result);
-    }).fail(() => {
+function initSkill(userIdx) {
+    const result = getData('skill', userIdx);
+    if(!result){
         // draw fail result div
         deleteAll("pie-chart-div");
         deleteAll("chart-desc-div");
         const chartDiv = document.getElementById('pie-chart-div');
         chartDiv.append(dataLoadFailTxt);
-    })
+    }
+    drawSkillChart(result);
 }
 
 // 데이터 갱신
-function skillsUpdate(userIdx) {
-    $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/skill/update`,
-        method: 'GET',
-        dataType: 'json'
-    }).always(()=>{
-        skillsLoad(userIdx);
-    });
+function updateSkill(userIdx) {
+    const state = updateData('skill', userIdx);
+    if(!state){
+        return false;
+    }
+    initSkill(userIdx);
 }
 
 function drawSkillChart(data) {

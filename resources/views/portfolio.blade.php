@@ -37,11 +37,13 @@
                                     <div class="col-8" style="margin-top: 0.5em">
                                         <h4>📅 Contribution Calendar</h4>
                                     </div>
+                                    @if(auth()->check() && auth()->user()->idx==$user->idx)
                                     <div class="col" style="margin-top: 0.2em; text-align: right">
-                                        <button onclick="calendarUpdate({{$user->idx}})" class="btn btn-light" type="button">
+                                        <button onclick="updateCalendar({{$user->idx}})" class="btn btn-light" type="button">
                                             <i class="fas fa-sync"></i>
                                         </button>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="card-body">
@@ -90,11 +92,13 @@
                                             <div class="col-7" style="margin-top: 0.5em">
                                                 <h4>📊 Skills</h4>
                                             </div>
-                                            <div class="col" style="margin-top: 0.2em; text-align: right">
-                                                <button onclick="skillsUpdate({{$user->idx}})" class="btn btn-light" type="button">
-                                                    <i class="fas fa-sync"></i>
-                                                </button>
-                                            </div>
+                                            @if(auth()->check() && auth()->user()->idx==$user->idx)
+                                                <div class="col" style="margin-top: 0.2em; text-align: right">
+                                                    <button onclick="updateSkill({{$user->idx}})" class="btn btn-light" type="button">
+                                                        <i class="fas fa-sync"></i>
+                                                    </button>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -173,10 +177,11 @@
                                     <div class="col-7" style="margin-top: 0.5em">
                                         <h4>📌 Pinned Repository</h4>
                                     </div>
+                                    @if(auth()->check() && auth()->user()->idx==$user->idx)
                                     <div class="col" style="margin-top: 0.2em; text-align: right">
-                                        <button onclick="repositoriesUpdate({{$user->idx}})" class="btn btn-light" type="button"><i
-                                                class="fas fa-sync"></i></button>
+                                        <button onclick="updateRepo({{$user->idx}})" class="btn btn-light" type="button"><i class="fas fa-sync"></i></button>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="card-body">
