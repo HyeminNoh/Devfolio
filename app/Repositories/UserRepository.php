@@ -26,7 +26,7 @@ class UserRepository implements UserRepositoryInterface
     public function get($idx){
         $user = $this->user->find($idx);
         if(empty($user)){
-            Log::info('Get '.$idx.'user info fail');
+            Log::info('Get '.$idx.' user info fail');
             return false;
         }
         return $user;
