@@ -14,12 +14,21 @@ function initSkill(userIdx) {
 }
 
 // 데이터 갱신
+let isSkill = false;
 function updateSkill(userIdx) {
+    if(isSkill){
+        swal('1분 후 시도해 주세요.', 'Skill 정보가 이미 최신 상태 입니다.', 'info');
+        return false;
+    }
+    isSkill = true;
     const state = updateData('skill', userIdx);
     if(!state){
         return false;
     }
     initSkill(userIdx);
+    setTimeout(()=>{
+        isSkill = false;
+    }, 60000)
 }
 
 function drawSkillChart(data) {

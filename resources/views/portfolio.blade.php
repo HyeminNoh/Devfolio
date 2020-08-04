@@ -9,7 +9,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div>
-                                    <img src="{{ $user->avatar }}" width="100%;">
+                                    <img src="{{ $user->avatar }}" style="width: 100%" alt="avatar">
                                 </div>
                                 <div style="margin-top: 1em;">
                                     <h3>
@@ -290,4 +290,7 @@
     <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css"/>
+
+    <!-- sweetalert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 @endpush

@@ -13,12 +13,21 @@ function initCalendar(userIdx) {
 }
 
 // 데이터 갱신
+let isCal = false;
 function updateCalendar(userIdx) {
+    if(isCal){
+        swal('1분 후 시도해 주세요', 'Contribution 정보가 이미 최신 상태 입니다.', 'info');
+        return false;
+    }
+    isCal = true;
     const state = updateData('contribution', userIdx);
     if(!state){
         return false;
     }
     initCalendar(userIdx);
+    setTimeout(()=>{
+        isCal = false;
+    }, 60000);
 }
 
 function drawCalendar(data) {

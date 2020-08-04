@@ -12,12 +12,21 @@ function initRepo(userIdx) {
 }
 
 // 데이터 갱신
+let isRepo = false;
 function updateRepo(userIdx) {
+    if(isRepo){
+        swal('1분 후 시도해 주세요', 'Repository 정보가 이미 최신 상태 입니다.', 'info');
+        return false;
+    }
+    isRepo = true;
     const state = updateData('repository', userIdx);
     if(!state){
         return false;
     }
     initRepo(userIdx);
+    setTimeout(()=>{
+        isRepo = false;
+    }, 60000)
 }
 
 // 리포짓 정보 카드들을 담을 div 컴포넌트 구성

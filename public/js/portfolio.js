@@ -88,7 +88,6 @@ function updatedState(updatedTime) {
     return dayDiff < 1;
 }
 
-// 데이터 조회 요청 ajax
 function getData(type, userIdx) {
     let data = []
     $.ajax({
@@ -104,14 +103,14 @@ function getData(type, userIdx) {
 
 // 데이터 갱신 요청 ajax
 function updateData(type, userIdx) {
-    let state = false;
+    let response = false;
     $.ajax({
         url: `http://127.0.0.1:8000/report/${userIdx}/${type}/update`,
         method: 'GET',
         dataType: 'json',
         async: false,
     }).done(()=>{
-        state = true;
+        response = true;
     });
-    return state;
+    return response;
 }
