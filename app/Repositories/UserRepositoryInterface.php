@@ -7,16 +7,22 @@ namespace App\Repositories;
 interface UserRepositoryInterface
 {
     /**
+     * @param $userMail
+     * @return mixed
+     */
+    public function whereEmail($userMail);
+
+    /**
      * @param $idx
      * @return mixed
      */
-    public function get($idx);
+    public function whereIdx($idx);
 
     /**
      * @param $githubId
      * @return mixed
      */
-    public function getGithub($githubId);
+    public function whereGithub($githubId);
 
     /**
      * @return mixed

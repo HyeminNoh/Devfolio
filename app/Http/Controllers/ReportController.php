@@ -34,7 +34,7 @@ class ReportController extends Controller
      * @return Application|Factory|RedirectResponse|View
      */
     public function show($githubId){
-        $user = $this->userRepo->getGithub($githubId);
+        $user = $this->userRepo->whereGithub($githubId);
         if(empty($user)){
             Alert::warning('Not Found User', 'The user you are looking for was not found');
             return redirect()->back();

@@ -19,13 +19,13 @@ class ReportFactoryMethod
     {
         // Reflection 활용 클래스 생성 - 생성할 객체가 뚜렷해 활용 가능
         $className = ucfirst($type);
-        $classPath = "App\Factories\\" . $className;
+        $classPath = "App\Services\\" . $className;
         if (class_exists($classPath)) {
             try {
                 Log::info($className . ' instance created');
                 $refClass = new ReflectionClass($classPath);
                 $userRepo = new UserRepository();
-                $user = $userRepo->get($userIdx);
+                $user = $userRepo->whereIdx($userIdx);
                 return $refClass->newInstance($user);
             } catch (ReflectionException $e) {
                 Log::info('Creating ' . $className . ' instance is fail');
