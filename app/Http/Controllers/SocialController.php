@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use Illuminate\Database\QueryException;
+use App\Repositories\UserRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -13,14 +12,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SocialController extends Controller
 {
-    protected $user;
+    protected $userRepo;
 
     /**
      * SocialController constructor.
+     * @param UserRepository $userRepo
      */
-    public function __construct()
+    public function __construct(UserRepository $userRepo)
     {
-        $this->user = new User;
+        $this->userRepo = $userRepo;
         $this->middleware('guest');
     }
 
@@ -37,6 +37,7 @@ class SocialController extends Controller
             return $this->redirectToProvider($provider);
         }
 
+        // oauth 인증 완료 후 code 포함 request 회신
         return $this->handleProviderCallback($provider);
     }
 
@@ -48,9 +49,15 @@ class SocialController extends Controller
      */
     protected function redirectToProvider($provider)
     {
-        return Socialite::driver($provider)
-            ->scopes(['read:user', 'public_repo'])
-            ->redirect();
+        switch ($provider){
+            case 'github':
+                return Socialite::driver($provider)
+                    ->scopes(['read:user', 'public_repo'])
+                    ->redirect();
+            default:
+                Alert::warning('Undefined social type');
+                return redirect('/');
+        }
     }
 
     /**
@@ -61,7 +68,7 @@ class SocialController extends Controller
      */
     protected function handleProviderCallback($provider)
     {
-        // oauth 정보 로드
+        // oauth 정보 Socialite 통해 확인 가능
         $socialData = Socialite::driver($provider)->user();
 
         // 필수 정보 조회 성공 여부 확인
@@ -75,39 +82,24 @@ class SocialController extends Controller
             return redirect('/');
         }
 
-        // 중복 사용 되는 값 변수 처리
         $userMail = $socialData->getEmail();
-        $userNickname = $socialData->getNickname();
-        $nowDt = now();
 
         // 사용자 등록 여부 확인
-        $user = ($this->user->whereEmail($userMail)->first());
+        $user = $this->userRepo->whereEmail($userMail);
 
         // 새로운 사용자 추가
-        if (!$user) {
-            try {
-                $user = $this->user->create([
-                    'name' => $socialData->getName() ?: $userNickname,
-                    'email' => $userMail,
-                    'github_id' => $userNickname,
-                    'access_token' => $socialData->token,
-                    'github_url' => $socialData->user['html_url'] ?: '',
-                    'blog_url' => $socialData->user['blog'] ?: '',
-                    'avatar' => $socialData->getAvatar() ?: '',
-                    'updated_dt' => $nowDt,
-                    'created_dt' => $nowDt
-                ]);
-            } catch (QueryException $exception) {
+        if (empty($user)) {
+            $newUser = $this->userRepo->create($socialData);
+            if(empty($newUser)){
                 Alert::error('Sign Up Fail');
-                Log::info('Sign Up Fail');
-                Log::error("Sign Up Fail Error Message: \n".$exception);
                 return redirect('/');
             }
+            $user = $newUser;
             Alert::success('Sign up Success');
             Log::info('Sign Up: ' . $socialData->getEmail());
         }
         auth()->login($user);
         Log::info('Sign in: ' . auth()->user()->name);
-        return redirect('/');
+        return redirect()->back();
     }
 }
