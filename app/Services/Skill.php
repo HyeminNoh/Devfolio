@@ -46,7 +46,11 @@ class Skill extends AbstractReport
                     }
                 }';
         $apiResponse = $this->callGraphql($this->githubToken, $query, 'Skill');
-        $this->parseData($apiResponse);
+        if(empty($apiResponse)){
+            Log::info('Set Skill instance data is fail');
+            return false;
+        }
+        return $this->parseData($apiResponse);
     }
 
     /**

@@ -5,7 +5,6 @@ namespace App\Repositories;
 
 use App\Services\ReportFactoryMethod;
 use App\Report;
-use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
@@ -13,17 +12,18 @@ class ReportRepository implements ReportRepositoryInterface
 {
     protected $reportFactory;
     protected $report;
-    protected $user;
+    protected $userRepo;
+    protected $typeList;
 
     /**
      * ReportRepository constructor.
      */
     public function __construct()
     {
-        // factory 생성
         $this->reportFactory = new ReportFactoryMethod;
         $this->report = new Report;
-        $this->user = new User;
+        $this->userRepo = new UserRepository();
+        $this->typeList = array('blog', 'contribution', 'skill', 'repository');
     }
 
     /**
@@ -35,11 +35,21 @@ class ReportRepository implements ReportRepositoryInterface
      */
     public function get($userIdx, $type)
     {
-        // 사용자 아이디 기반 조회
-        $checkData = $this->report->where(['user_idx' => $userIdx, 'type' => $type])->first();
+        // 사용자 존재 체크
+        if(empty($this->userRepo->whereIdx($userIdx))){
+            Log::info('Get report data is fail - '.$userIdx.' is not exist.');
+            return false;
+        }
 
-        // 데이터가 아예 없을 경우 생성
-        if (empty($checkData)) {
+        // type 유효성 체크
+        if(!in_array($type, $this->typeList)){
+            Log::info('Get report data is fail - Undefined type report');
+            return false;
+        }
+
+        // 매개변수는 유효하지만 데이터가 존재하지 않을 때
+        $isReport = $this->report->where(['user_idx' => $userIdx, 'type' => $type])->exists();
+        if (empty($isReport)) {
             $this->store($userIdx, $type);
         }
 
@@ -65,7 +75,20 @@ class ReportRepository implements ReportRepositoryInterface
      * @return bool
      */
     public function update($userIdx, $type)
-    {// instance 생성
+    {
+        // 사용자 존재 체크
+        if(empty($this->userRepo->whereIdx($userIdx))){
+            Log::info('Update report data is fail - '.$userIdx.' is not exist.');
+            return false;
+        }
+
+        // type 유효성 체크
+        if(!in_array($type, $this->typeList)){
+            Log::info('Update report data is fail - Undefined type report');
+            return false;
+        }
+
+        // instance 생성
         $report = $this->reportFactory->makeReport($userIdx, $type);
         $response = $report->getData($type);
 
@@ -96,21 +119,25 @@ class ReportRepository implements ReportRepositoryInterface
     private function store($userIdx, $type)
     {
         // blog_url이 없는 사용자는 blog 데이터를 등록할 필요가 없음
-        $user = $this->user->find($userIdx);
+        $user = $this->userRepo->whereIdx($userIdx);
         if ($type == 'blog' && empty($user->blog_url)) {
             return false;
         }
 
         // instance 생성
         $report = $this->reportFactory->makeReport($userIdx, $type);
-        $response = $report->getData();
-        $nowDt = now();
-
-        if (empty($response)) {
-            Log::info('Data for storing is empty');
+        if(empty($report)){
+            Log::info('Data storing is fail -  Make report instance is fail');
             return false;
         }
 
+        $response = $report->getData();
+        if (empty($response)) {
+            Log::info('Data storing is fail - Instance data is empty');
+            return false;
+        }
+
+        $nowDt = now();
         try {
             $this->report->create([
                 'user_idx' => $userIdx,

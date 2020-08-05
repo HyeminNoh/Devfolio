@@ -4,6 +4,7 @@ namespace App\Services;
 
 use DateTime;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class Contribution extends AbstractReport
 {
@@ -53,7 +54,11 @@ class Contribution extends AbstractReport
                       }
                 }';
         $apiResponse = $this->callGraphql($this->githubToken, $query, 'Contribution');
-        $this->parseData($apiResponse);
+        if(empty($apiResponse)){
+            Log::info('Set Contribution instance data is fail');
+            return false;
+        }
+        return $this->parseData($apiResponse);
     }
 
     /**
@@ -66,6 +71,11 @@ class Contribution extends AbstractReport
     public function parseData($apiResponse)
     {
         $inputData = $apiResponse->data->user->contributionsCollection->contributionCalendar;
+        if(empty($inputData)){
+            Log::info('Contribution data for parsing is empty');
+            return false;
+        }
+
         $this->colors = $inputData->colors;
         $this->totalContributions = $inputData->totalContributions;
 
@@ -76,5 +86,6 @@ class Contribution extends AbstractReport
                 $this->dailyData[$timeToSeconds->format('U')] = $day->contributionCount;
             }
         }
+        return true;
     }
 }

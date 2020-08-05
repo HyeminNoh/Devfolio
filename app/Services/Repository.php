@@ -67,7 +67,11 @@ class Repository extends AbstractReport
                         }
                       }';
         $apiResponse = $this->callGraphql($this->githubToken, $query, 'Repository');
-        $this->parseData($apiResponse);
+        if(empty($apiResponse)){
+            Log::info('Set Repository instance data is fail');
+            return false;
+        }
+        return $this->parseData($apiResponse);
     }
 
     /**
@@ -108,6 +112,12 @@ class Repository extends AbstractReport
     public function parseData($apiResponse)
     {
         $repositories = $apiResponse->data->user->pinnedItems->edges;
+
+        if (empty($repositories)) {
+            Log::info('Repository Data for parsing is empty');
+            return false;
+        }
+
         foreach ($repositories as $repo) {
             $repoData = $repo->node;
             $contributor = $this->getAdditionalData($repoData->nameWithOwner, $this->githubToken);
@@ -127,5 +137,6 @@ class Repository extends AbstractReport
             );
             array_push($this->resultArray, $repoArray[0]);
         }
+        return true;
     }
 }

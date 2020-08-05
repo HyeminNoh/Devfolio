@@ -58,6 +58,10 @@ class Blog extends AbstractReport
      */
     public function parseData($data)
     {
+        if(!isset($data[0]->channel->item)){
+            Log::info('Blog post not exist');
+            return false;
+        }
         $posts = $data[0]->channel->item;
         $postSize = count($posts);
 
@@ -74,6 +78,7 @@ class Blog extends AbstractReport
                 'date' => strftime("%Y-%m-%d", strtotime($postArray->pubDate))
             ]);
         }
+        return true;
     }
 
     public function getRssFeed($requestUrl){
@@ -86,8 +91,7 @@ class Blog extends AbstractReport
             ])
                 ->getBody()->getContents();
             $response = simplexml_load_string($response, 'SimpleXMLElement', LIBXML_NOCDATA);
-            $this->parseData($response);
-            return true;
+            return $this->parseData($response);
         } catch (GuzzleException $e) {
             Log::info('Loading rss blog data is fail');
             Log::error("Loading rss blog data error message: \n".$e);
