@@ -3,14 +3,16 @@
 // 데이터 로드
 function initSkill(userIdx) {
     const result = getData('skill', userIdx);
-    if(!result){
+    if(result.length===0){
         // draw fail result div
         deleteAll("pie-chart-div");
         deleteAll("chart-desc-div");
         const chartDiv = document.getElementById('pie-chart-div');
         chartDiv.append(dataLoadFailTxt);
+        return false;
     }
     drawSkillChart(result);
+    return true;
 }
 
 // 데이터 갱신

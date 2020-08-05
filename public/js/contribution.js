@@ -3,13 +3,15 @@
 // 데이터 로드
 function initCalendar(userIdx) {
     const result = getData('contribution', userIdx);
-    if(!result){
+    if(result.length===0){
         deleteAll('cal-heatmap');
         const calendarDiv = document.getElementById('cal-heatmap');
         calendarDiv.append(dataLoadFailTxt);
+        return false;
     }
     // calendar view 자리 다시 그리기
     drawCalendar(result);
+    return true;
 }
 
 // 데이터 갱신

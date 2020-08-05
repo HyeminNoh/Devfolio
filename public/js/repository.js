@@ -3,12 +3,14 @@
 // 데이터 로드
 function initRepo(userIdx) {
     const result = getData('repository', userIdx);
-    if(!result){
+    if(result.length===0){
         deleteAll('repositories-div');
         const repoDiv = document.getElementById('repositories-div');
         repoDiv.append(dataLoadFailTxt);
+        return false;
     }
     drawRepoCards(result);
+    return true;
 }
 
 // 데이터 갱신
@@ -41,99 +43,44 @@ function drawRepoCards(data) {
     // pinned reposit 정보만 추출
     data = JSON.parse(data[0].data);
     if (data.length) {
+        const cardTemplate = document.querySelector('#repo-card-template').innerHTML;
+        let cards = "";
         // 리포짓 개수 만큼 카드 생성
         data.forEach((node) => {
-            const cardCol = document.createElement('div');
-            cardCol.className = 'col-12 col-sm-12 col-md-12';
-            cardCol.style.padding = '1em';
-            const card = makeRepoCard(node);
-            cardCol.append(card);
-            repositoriesDiv.append(cardCol);
+            let stat = makeStat(node);
+            cards += cardTemplate.replace("{name}",node.name)
+                .replace("{data}", encodeURIComponent(JSON.stringify(node)))
+                .replace("{description}", node.description)
+                .replace("{stat}",stat)
+                .replace("{disk}", node.diskUsage);
+            repositoriesDiv.innerHTML = cards;
         });
     } else { // pinned reposit 0개일 때
         repositoriesDiv.append(dataNullDiv('지정된 대표 저장소가 없습니다.'));
     }
 }
 
-// 전달받은 데이터 기준 카드뷰 생성
-function makeRepoCard(node) {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    const cardBody = document.createElement('div');
-    cardBody.className = 'card-body';
-
-    // 저장소 이름
-    const title = document.createElement('div');
-    title.innerHTML = `<a href='${node.url}'><h5>${node.name}</h5></a><hr>`;
-
-    // 저장소 설명
-    const description = document.createElement('div');
-    description.innerHTML = `<p>${node.description}</p>`;
-
-    // 저장소 상태를 담을 div
-    const stat = document.createElement('div');
-    stat.className = 'row';
-    const leftRow = document.createElement('div');
-    leftRow.className = 'row';
-    const leftCol = document.createElement('div');
-    leftCol.className = 'col';
-    const rightCol = document.createElement('div');
-    rightCol.className = 'col';
-    rightCol.style.textAlign = 'right';
-    const stargazer = document.createElement('col');
-    stargazer.style.marginLeft = '1em';
-    const language = document.createElement('col');
-    language.style.marginLeft = '0.3em';
-    const fork = document.createElement('col');
-    fork.style.marginLeft = '0.3em';
-
+function makeStat(node) {
+    let stat = '';
     // star 개수
     if (node.totalCount !== 0) {
-        stargazer.innerHTML = `<p style='color:#808080;'><i class='fas fa-star' style='color: #808080'></i>&nbsp${node.totalCount}</p>`;
+        stat += `<div class="col-auto"><p style='color:#808080;'><i class='fas fa-star' style='color: #808080'></i>&nbsp${node.totalCount}</p></div>`;
     }
-
     // 주요 언어
     if (node.primaryLanguage) {
-        language.innerHTML = `<p style='color:#808080;'><i class='fas fa-circle' style='color: ${node.primaryLanguage.color}'></i>&nbsp${node.primaryLanguage.name}</p>`;
+        stat += `<div class="col-auto"><p style='color:#808080;'><i class='fas fa-circle' style='color: ${node.primaryLanguage.color}'></i>&nbsp${node.primaryLanguage.name}</p></div>`;
     }
-
     // fork 개수
     if (node.forkCount !== 0) {
-        fork.innerHTML = `<p style='color:#808080;'><i class='fas fa-code-branch' style='color: #808080'></i>&nbsp${node.forkCount}</p>`;
+        stat += `<div class="col-auto"><p style='color:#808080;'><i class='fas fa-code-branch' style='color: #808080'></i>&nbsp${node.forkCount}</p></div>`;
     }
+    return stat
 
-    // 용량
-    rightCol.innerHTML = `<p>${node.diskUsage} KB</p>`;
-
-    // 카드 뷰 전체를 클릭 영역으로 지정
-    const stretchedLink = document.createElement('a');
-    stretchedLink.className = 'stretched-link';
-    stretchedLink.style.cursor = 'pointer';
-    stretchedLink.setAttribute('data-toggle', 'modal');
-    stretchedLink.setAttribute('data-target', '#repoModal');
-    stretchedLink.onclick = () => {
-        makeRepoModal(node);
-    }
-
-    leftRow.append(stargazer);
-    leftRow.append(language);
-    leftRow.append(fork);
-    leftCol.append(leftRow);
-
-    // 카드 바디 안에 내용 채우기
-    stat.append(leftCol);
-    stat.append(rightCol);
-    cardBody.append(title);
-    cardBody.append(description);
-    cardBody.append(stat);
-    cardBody.append(stretchedLink);
-    card.append(cardBody);
-    return card;
 }
 
 // 카드 뷰를 눌렀을 때 보여질 모달 정보 설정
-function makeRepoModal(node) {
+function makeRepoModal(el) {
+    const node = JSON.parse(decodeURIComponent(el.parentElement.querySelector('input').value));
     // 저장소 이름
     const title = document.getElementById('repoModalTitle');
     title.innerText = node.name;
@@ -168,24 +115,26 @@ function makeRepoModal(node) {
     // 언어 사용 설명
     const langDesc = document.getElementById('modalLangDesc');
     deleteAll('modalLangDesc');
+    const langTemplate = document.querySelector('#lang-text').innerHTML;
+    let langText = '';
     if (languages.length) {
         for (let i = 0; i < languages.length; i++) {
-            const langText = document.createElement('p');
-            langText.innerHTML = `<i class='fas fa-circle' style='color:${languages[i].node.color}'></i>&nbsp;&nbsp;${languages[i].node.name}: ${languages[i].size} bytes`;
-            langDesc.append(langText);
+            langText += langTemplate.replace("{color}", languages[i].node.color)
+                .replace("{name}", languages[i].node.name)
+                .replace("{size}", languages[i].size)
             langLabels.push(languages[i].node.name);
             langValues.push(languages[i].size);
             langColors.push(languages[i].node.color);
-
         }
     } else { // 주요 사용 언어가 없는 경우, markdown언어로만 작성된 경우임
-        const langText = document.createElement('p');
-        langText.innerHTML = `<i class='fas fa-circle' style='color:gray;'></i>&nbsp;&nbsp;Markdown All files`;
-        langDesc.append(langText);
+        langText += langTemplate.replace("{color}",'gray')
+            .replace("{name}", 'Markdown')
+            .replace("{size}", '-');
         langLabels.push('Markdown');
         langValues.push(1);
         langColors.push('gray');
     }
+    langDesc.innerHTML = langText;
 
     // 언어 사용 통계 그래프
     const langChartDiv = document.getElementById('modalLangChart');

@@ -120,17 +120,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-12 col-md-12">
-                                                <div id="chart-desc-div" class="row" style="margin-top: 1em">
-                                                    <div class="col">
-                                                        <div class="d-flex justify-content-center">
-                                                            <div
-                                                                class="spinner-border spinner-border m-5 text-secondary"
-                                                                role="status">
-                                                                <span class="sr-only">Loading...</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <div id="chart-desc-div" class="row" style="margin-top: 1em"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -266,6 +256,53 @@
             </div>
         </div>
     </div>
+    <!-- blog card template -->
+    <script id="blog-card-template" type="text/template">
+        <div class="col-12 col-sm-12 col-md-12" style="padding: 1em;">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-auto"><h5>{title}</h5></div>
+                        <div class="col" style="text-align: right"><p style='color: gray'>{date}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {badge}
+                        </div>
+                    </div>
+                    <a class="stretched-link" href="{link}"></a>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!-- repo card template -->
+    <script id="repo-card-template" type="text/template">
+        <div class="col-12 col-sm-12 col-md-12" style="padding: 1em;">
+            <div class="card">
+                <div class="card-body">
+                    <h5>{name}</h5><hr><p>{description}</p>
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="row">
+                                {stat}
+                            </div>
+                        </div>
+                        <div class="col" style="text-align: right">
+                            <p>{disk} KB</p>
+                        </div>
+                    </div>
+                    <input type="hidden" value="{data}"/>
+                    <a class="stretched-link" style="cursor: pointer" data-toggle="modal" data-target="#repoModal" onclick="makeRepoModal(this)"></a>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!-- lang desc text template -->
+    <script id="lang-text" type="text/template">
+        <div>
+            <p><i class='fas fa-circle' style='color:{color}'></i>&nbsp;&nbsp;{name}: {size} bytes</p>
+        </div>
+    </script>
 @endsection
 
 @push('scripts')
