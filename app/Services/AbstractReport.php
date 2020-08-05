@@ -63,9 +63,15 @@ abstract class AbstractReport
                 ]
             )->getBody();
 
-            Log::info('Calling API for' . $type . 'Data Success');
-            return json_decode($response);
+            Log::info('Calling API for '. $type .' Data Success');
+            $response = json_decode($response);
 
+            // 응답은 왔지만 bad response 경우
+            if(empty(isset($response->data))){
+                Log::info('Bad response - '.$response->message);
+                return false;
+            }
+            return $response;
         } catch (GuzzleException $e) {
             // api 오류 처리
             Log::info("Calling GraphQL for" . $type . "Data Fail");
