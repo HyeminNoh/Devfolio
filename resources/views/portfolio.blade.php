@@ -61,10 +61,12 @@
                                             <div class="col-1">
                                                 <button id="prev-btn" class="btn btn-light" style="height: 80%"><</button>
                                             </div>
-                                            <div class="col" id="cal-heatmap" style="overflow: hidden" >
-                                                <div class="d-flex justify-content-center">
-                                                    <div class="spinner-border text-secondary" role="status">
-                                                        <span class="sr-only">Loading...</span>
+                                            <div class="col" style="overflow: hidden">
+                                                <div id="cal-heatmap">
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="spinner-border text-secondary" role="status">
+                                                            <span class="sr-only">Loading...</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -120,7 +122,10 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-12 col-md-12">
-                                                <div id="chart-desc-div" class="row" style="margin-top: 1em"></div>
+                                                <div id="chart-desc-div" class="row" style="margin-top: 1em">
+                                                    <div class="col" id="skill-desc-left-col"></div>
+                                                    <div class="col" id="skill-desc-right-col"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -205,22 +210,24 @@
                             <div class="col" style="margin-top: 0.5em;">
                                 <a id="titleLink"><h4 id="repoModalTitle">Modal title</h4></a>
                             </div>
-                            <div class="col" style="text-align: right; margin-top: 0.5em;">
-                                <p id="modalCount" style="color:#808080;"></p>
+                            <div id="modalCount" class="col" style="text-align: right; margin-top: 0.5em;">
                             </div>
                         </div>
-                        <div class="row" style="margin: 0.1em;">
-                            <div id="modalPageUrl" class="col">
-                            </div>
-                        </div>
-                        <div class="row bg-light" style="margin: 0.1em;">
+                        <div id="modalPageUrlDiv" class="row" style="margin: 0.1em;">
                             <div class="col">
-                                <p id="repoModalDesc" style="margin-top: 1em;">Description</p>
+                                <p style='overflow: hidden; text-overflow: ellipsis; display: inline-block; width: 100%; white-space: nowrap;'>
+                                    <i class='fas fa-link' style='color:gray;'></i>&nbsp;&nbsp;<a id="modalPageUrl" style='color:gray;'></a>
+                                </p>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row" style="margin: 0.1em;">
+                        <div id="modalDescDiv" class="row" style="margin: 0.1em;">
                             <div class="col">
+                                <p class="bg-light" id="repoModalDesc" style="padding: 1.5em;">Description</p>
+                            </div>
+                        </div>
+                        <div id="modalLangDiv" class="row" style="margin: 0.1em;">
+                            <div class="col">
+                                <hr>
                                 <div class="row">
                                     <div class="col">
                                         <h5>Languages</h5>
@@ -234,9 +241,9 @@
                                 </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row" style="margin: 0.2em;">
+                        <div id="modalContriDiv" class="row" style="margin: 0.1em;">
                             <div class="col">
+                                <hr>
                                 <div class="row">
                                     <div class="col">
                                         <h5>Contributors</h5>
@@ -246,6 +253,11 @@
                                     <div id="contriProfileCol" class="col"></div>
                                     <div id="contriChartDiv" class="col"></div>
                                 </div>
+                            </div>
+                        </div>
+                        <div id="modalEmptyDiv" class="row" style="margin: 0.2em;">
+                            <div class="col" style="text-align: center">
+                                <h5 style="line-height: 2em; padding: 1em">저장소가 비어 있어요..! 😲<br>저장소의 내용을 분석할 수 없어요</h5>
                             </div>
                         </div>
                     </div>
@@ -284,7 +296,9 @@
                     <div class="row">
                         <div class="col-auto">
                             <div class="row">
-                                {stat}
+                                <div class="col">
+                                    <p style='color:#808080;'>{stat}</p>
+                                </div>
                             </div>
                         </div>
                         <div class="col" style="text-align: right">
@@ -298,9 +312,32 @@
         </div>
     </script>
     <!-- lang desc text template -->
-    <script id="lang-text" type="text/template">
-        <div>
-            <p><i class='fas fa-circle' style='color:{color}'></i>&nbsp;&nbsp;{name}: {size} bytes</p>
+    <script id="lang-desc-text" type="text/template">
+        <div class="row" style="margin-left: 1em;">
+            <p><i class='fas fa-circle' style="color:{color}"></i>&nbsp;&nbsp;{name}: {size} bytes</p>
+        </div>
+    </script>
+    <!-- star count col template -->
+    <script id="star-count-template" type="text/template">
+        <i class='fas fa-star' style='color: #808080'></i>&nbsp{count}
+    </script>
+    <!-- lang col template -->
+    <script id="primary-lang-template" type="text/template">
+        <i class='fas fa-circle' style='color:{color}'></i>&nbsp{name}
+    </script>
+    <!-- fork count col template -->
+    <script id="fork-count-template" type="text/template">
+        <i class='fas fa-code-branch' style='color: #808080'></i>&nbsp{count}
+    </script>
+    <!-- modal profile thumbnail -->
+    <script id="modal-profile-thumbnail" type="text/template">
+        <div class="row">
+            <div class="col">
+                <img src="{src}" class='img-thumbnail' alt='avatar'/>
+            </div>
+            <div class="col">
+                <p><a href='{profileLink}'><span style='font-weight: bold'>{name}</span></a><br>{commit} commits</p>
+            </div>
         </div>
     </script>
 @endsection
