@@ -18,7 +18,7 @@ function initCalendar(userIdx) {
 let isCal = false;
 function updateCalendar(userIdx) {
     if(isCal){
-        swal('1분 후 시도해 주세요', 'Contribution 정보가 이미 최신 상태 입니다.', 'info');
+        swal('1분 후 시도해 주세요', 'Contribution 정보가 이미 최신 상태 입니다.', 'warning');
         return false;
     }
     isCal = true;
@@ -26,6 +26,7 @@ function updateCalendar(userIdx) {
     if(!state){
         return false;
     }
+    swal('갱신 성공', 'Contribution 정보가 갱신되었습니다.', 'info');
     initCalendar(userIdx);
     setTimeout(()=>{
         isCal = false;

@@ -17,7 +17,7 @@ function initRepo(userIdx) {
 let isRepo = false;
 function updateRepo(userIdx) {
     if(isRepo){
-        swal('1분 후 시도해 주세요', 'Repository 정보가 이미 최신 상태 입니다.', 'info');
+        swal('1분 후 시도해 주세요', 'Repository 정보가 이미 최신 상태 입니다.', 'warning');
         return false;
     }
     isRepo = true;
@@ -25,6 +25,7 @@ function updateRepo(userIdx) {
     if(!state){
         return false;
     }
+    swal('갱신 성공', 'Repository 정보가 갱신되었습니다.', 'info');
     initRepo(userIdx);
     setTimeout(()=>{
         isRepo = false;

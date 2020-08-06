@@ -103,15 +103,17 @@ function getData(type, userIdx) {
 
 // 데이터 갱신 요청 ajax
 function updateData(type, userIdx) {
-    let response = false;
+    let result = false;
     $.ajax({
         url: `http://127.0.0.1:8000/report/${userIdx}/${type}`,
         method: 'PATCH',
         dataType: 'json',
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         async: false,
-    }).done(()=>{
-        response = true;
+    }).done((response)=>{
+        if(response.success){
+            result = true;
+        }
     });
-    return response;
+    return result;
 }
