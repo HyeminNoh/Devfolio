@@ -55,9 +55,9 @@ class ReportRepository implements ReportRepositoryInterface
         }
 
         // 마지막 업데이트 날짜 체크
-        $date1 = now();
-        $date2 = $this->report->where(['user_idx' => $userIdx, 'type' => $type])->first()->updated_dt;
-        $interval = $date1->diff($date2)->days;
+        $now = now();
+        $lastUpdated = $this->report->where(['user_idx' => $userIdx, 'type' => $type])->first()->updated_dt;
+        $interval = $now->diff($lastUpdated)->days;
         if(1<=$interval){
             $this->update($userIdx, $type);
         };
