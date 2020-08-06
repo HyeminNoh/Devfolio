@@ -38,10 +38,10 @@ Route::get('report/{githubId}', [
 ]);
 
 /* update report data */
-Route::get('report/{userIdx}/{type}/update', [
+Route::patch('report/{userIdx}/{type}', [
     'as' => 'skill.update',
     'uses' => 'ReportController@update'
 ]);
 
 /* get report json data */
-Route::get('report/{userIdx}/{type}/get', 'ReportController@get');
+Route::get('report/{userIdx}/{type}', 'ReportController@get');

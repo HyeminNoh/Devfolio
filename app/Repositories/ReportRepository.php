@@ -101,7 +101,7 @@ class ReportRepository implements ReportRepositoryInterface
             $this->report->where(['user_idx' => $userIdx, 'type' => $type])
                 ->update(['data' => $response, 'updated_dt' => now()]);
             Log::info('Update ' . $type . ' Data Success');
-            return true;
+            return json_encode(array('success' => true, 'message' => $type." Data Update Success"));
         } catch (QueryException $e) {
             Log::info('Update ' . $type . ' Data Fail');
             Log::error("Update ".$type." Data Error Message: \n" . $e);
