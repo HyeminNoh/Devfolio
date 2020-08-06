@@ -138,22 +138,13 @@ function makeRepoModal(el) {
         deleteAll('modalLangDesc');
         const langTemplate = document.querySelector('#lang-desc-text').innerHTML;
         let langText = '';
-        if (languages.length) {
-            for (let i = 0; i < languages.length; i++) {
-                langText += langTemplate.replace("{color}", languages[i].node.color)
-                    .replace("{name}", languages[i].node.name)
-                    .replace("{size}", languages[i].size)
-                langLabels.push(languages[i].node.name);
-                langValues.push(languages[i].size);
-                langColors.push(languages[i].node.color);
-            }
-        } else { // 주요 사용 언어가 없는 경우, markdown언어로만 작성된 경우임
-            langText += langTemplate.replace("{color}",'gray')
-                .replace("{name}", 'Markdown')
-                .replace("{size}", '-');
-            langLabels.push('Markdown');
-            langValues.push(1);
-            langColors.push('gray');
+        for (let i = 0; i < languages.length; i++) {
+            langText += langTemplate.replace("{color}", languages[i].node.color)
+                .replace("{name}", languages[i].node.name)
+                .replace("{size}", languages[i].size)
+            langLabels.push(languages[i].node.name);
+            langValues.push(languages[i].size);
+            langColors.push(languages[i].node.color);
         }
         langDesc.innerHTML = langText;
 
