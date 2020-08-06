@@ -66,7 +66,7 @@ function drawCalendar(data) {
         domain: 'month',
         subDomain: 'day',
         range: 11,
-        legend: [1, 3, 5, 7, 10],
+        legend: [1, 2, 3, 5, 10],
         legendColors: ['#efefef', colors[colors.length - 2]],
         legendHorizontalPosition: 'right',
         nextSelector: '#next-btn',
