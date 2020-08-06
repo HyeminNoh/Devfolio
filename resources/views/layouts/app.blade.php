@@ -64,10 +64,11 @@
         </div>
     </nav>
 
-    <main class="py-4">
+    <main class="py-4" onload="browseCheck()">
         @yield('content')
     </main>
     @stack('scripts')
+    <script src="{{ asset('js/browseCheck.js') }}"></script>
 </div>
 @include('sweetalert::alert')
 </body>
