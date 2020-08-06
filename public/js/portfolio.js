@@ -19,7 +19,7 @@ function dataNullDiv(content) {
     emptyDataCol.className = 'col text-center';
     emptyDataCol.style.margin = '1em';
     emptyDataCol.style.color = 'gray';
-    emptyDataCol.innerHTML = `<h4>${content}</h4>`;
+    emptyDataCol.innerHTML = `<h4 style="line-height: 2em;">${content}</h4>`;
     return emptyDataCol;
 }
 
@@ -91,7 +91,7 @@ function updatedState(updatedTime) {
 function getData(type, userIdx) {
     let data = []
     $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/${type}/get`,
+        url: `http://127.0.0.1:8000/report/${userIdx}/${type}`,
         method: 'GET',
         dataType: 'json',
         async: false,
@@ -105,9 +105,10 @@ function getData(type, userIdx) {
 function updateData(type, userIdx) {
     let response = false;
     $.ajax({
-        url: `http://127.0.0.1:8000/report/${userIdx}/${type}/update`,
-        method: 'GET',
+        url: `http://127.0.0.1:8000/report/${userIdx}/${type}`,
+        method: 'PATCH',
         dataType: 'json',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         async: false,
     }).done(()=>{
         response = true;
