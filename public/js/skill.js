@@ -10,6 +10,10 @@ function initSkill(userIdx) {
         chartDiv.append(dataLoadFailTxt);
         return false;
     }
+    if(!updatedState(result[0].updated_dt)){
+        // 마지막 업데이트가 하루 이상 지났을 시 다시 갱신
+        updateSkill(userIdx);
+    }
     drawSkillChart(result);
     return true;
 }

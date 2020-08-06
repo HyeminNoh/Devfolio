@@ -9,6 +9,10 @@ function initRepo(userIdx) {
         repoDiv.append(dataLoadFailTxt);
         return false;
     }
+    if(!updatedState(result[0].updated_dt)){
+        // 마지막 업데이트가 하루 이상 지났을 시 다시 갱신
+        updateRepo(userIdx);
+    }
     drawRepoCards(result);
     return true;
 }
