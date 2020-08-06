@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\Services\ReportFactoryMethod;
 use App\Report;
+use DateTime;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
@@ -52,6 +53,14 @@ class ReportRepository implements ReportRepositoryInterface
         if (empty($isReport)) {
             $this->store($userIdx, $type);
         }
+
+        // 마지막 업데이트 날짜 체크
+        $date1 = now();
+        $date2 = $this->report->where(['user_idx' => $userIdx, 'type' => $type])->first()->updated_dt;
+        $interval = $date1->diff($date2)->days;
+        if(1<=$interval){
+            $this->update($userIdx, $type);
+        };
 
         // 조회
         try {
