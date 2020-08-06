@@ -9,10 +9,6 @@ function initCalendar(userIdx) {
         calendarDiv.append(dataLoadFailTxt);
         return false;
     }
-    if(!updatedState(result[0].updated_dt)){
-        // 마지막 업데이트가 하루 이상 지났을 시 다시 갱신
-        updateCalendar(userIdx);
-    }
     // calendar view 자리 다시 그리기
     drawCalendar(result);
     return true;
