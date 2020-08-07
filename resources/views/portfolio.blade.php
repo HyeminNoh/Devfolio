@@ -362,8 +362,8 @@
 
     <!-- Load d3.js & color scale -->
     <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css"/>
+    <link rel="stylesheet" href="{{ asset('/js/cal-heatmap/cal-heatmap.css') }}" />
+    <script type="text/javascript" src="{{ asset('/js/cal-heatmap/cal-heatmap.min.js') }}"></script>
 
     <!-- sweetalert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
