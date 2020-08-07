@@ -52,7 +52,7 @@ class ReportController extends Controller
     public function update($userIdx, $type)
     {
         // 로그인 상태 체크 및 업데이트 요청 사용자가 현재 로그인한 사용자 인지 체크, blog는 사용자 인증 여부 상관 없이 갱신
-        if($type!='blog' && (!auth()->check() || auth()->user()->idx != $userIdx)){
+        if(!auth()->check() || auth()->user()->idx != $userIdx){
             Log::info('Unauthorized user request data update');
             return json_encode(array('success'=>false, 'message' => "Unauthorized user's request"));
         }

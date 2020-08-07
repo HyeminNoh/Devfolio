@@ -10,21 +10,8 @@ function initBlog(userIdx) {
         blogDiv.append(dataLoadFailTxt);
         return false;
     }
-    if(!updatedState(result[0].updated_dt)){
-        // 마지막 업데이트가 하루 이상 지났을 시 다시 갱신
-        updateBlog(userIdx);
-    }
     drawBlogCards(result);
     return true;
-}
-
-// 데이터 갱신
-function updateBlog(userIdx) {
-    const state = updateData('blog', userIdx);
-    if(!state){
-        return false;
-    }
-    initBlog(userIdx);
 }
 
 // blog-div 내부 채우기
