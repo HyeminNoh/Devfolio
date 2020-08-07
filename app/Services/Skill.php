@@ -65,7 +65,7 @@ class Skill extends AbstractReport
         $noDuplication = array();
 
         if (empty($inputData)) {
-            Log::info('Data for parsing is empty');
+            Log::info('Skill Data for parsing is empty');
             return false;
         }
 

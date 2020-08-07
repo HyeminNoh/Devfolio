@@ -54,7 +54,7 @@ class UserRepository implements UserRepositoryInterface
     public function whereEmail($userMail){
         $user = $this->user->where('email', $userMail)->first();
         if(empty($user)){
-            Log::info($userMail.' user is not found');
+            Log::info('whereEmail(): mail '.$userMail.' user is not found');
             return false;
         }
         return $user;
@@ -68,7 +68,7 @@ class UserRepository implements UserRepositoryInterface
     public function whereIdx($idx){
         $user = $this->user->find($idx);
         if(empty($user)){
-            Log::info($idx.' user is not found');
+            Log::info('whereIdx(): idx '.$idx.' user is not found');
             return false;
         }
         return $user;
@@ -83,7 +83,7 @@ class UserRepository implements UserRepositoryInterface
     public function whereGithub($githubId){
         $user = $this->user->where(['github_id' => $githubId])->first();
         if(empty($user)){
-            Log::info($githubId.' user is not found');
+            Log::info('whereGithub(): github id '.$githubId.' user is not found');
             return false;
         }
         return $user;
@@ -97,7 +97,7 @@ class UserRepository implements UserRepositoryInterface
     public function all(){
         $userList = $this->user->inRandomOrder()->get();
         if(empty($userList)){
-            Log::info('Get all users list in random fail');
+            Log::info('all(): user table is empty.');
             return false;
         }
         return $userList;

@@ -91,6 +91,7 @@ class Blog extends AbstractReport
             ])
                 ->getBody()->getContents();
             $response = simplexml_load_string($response, 'SimpleXMLElement', LIBXML_NOCDATA);
+            Log::info('Loading rss blog data is Success');
             return $this->parseData($response);
         } catch (GuzzleException $e) {
             Log::info('Loading rss blog data is fail');

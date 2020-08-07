@@ -5,7 +5,6 @@ namespace App\Repositories;
 
 use App\Services\ReportFactoryMethod;
 use App\Report;
-use DateTime;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
@@ -38,13 +37,13 @@ class ReportRepository implements ReportRepositoryInterface
     {
         // 사용자 존재 체크
         if(empty($this->userRepo->whereIdx($userIdx))){
-            Log::info('Get report data is fail - '.$userIdx.' is not exist.');
+            Log::info('Get report data is fail. user index '.$userIdx.' is not exist.');
             return false;
         }
 
         // type 유효성 체크
         if(!in_array($type, $this->typeList)){
-            Log::info('Get report data is fail - Undefined type report');
+            Log::info('Get report data is fail. Undefined type report');
             return false;
         }
 
@@ -67,11 +66,11 @@ class ReportRepository implements ReportRepositoryInterface
             $userData = $this->report->select(['data', 'updated_dt'])
                 ->where(['user_idx' => $userIdx, 'type' => $type])
                 ->get()->toJson();
-            Log::info('Select ' . $type . ' Data Success');
+            Log::info('user index '.$userIdx.': Select ' . $type . ' Data Success');
             return $userData;
         } catch (QueryException $e) {
-            Log::info('Select ' . $type . ' Data Fail');
-            Log::error("Select ".$type." Data Error Message: \n" . $e);
+            Log::info('user index '.$userIdx.': Select ' . $type . ' Data Fail');
+            Log::error('user index '.$userIdx.': Select '.$type."\n Data Error Message: ".$e);
             return false;
         }
     }
