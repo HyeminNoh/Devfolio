@@ -121,5 +121,6 @@
     <orderEntry type="library" name="chart.js" level="application" />
     <orderEntry type="library" name="moment.js" level="application" />
     <orderEntry type="library" name="sweetalert" level="application" />
+    <orderEntry type="library" name="all" level="application" />
   </component>
 </module>

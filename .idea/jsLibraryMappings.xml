@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{cal-heatmap, chart.js, d3.v3, moment.js, sweetalert}" />
+    <file url="PROJECT" libraries="{all, cal-heatmap, chart.js, d3.v3, moment.js, sweetalert}" />
   </component>
 </project>
